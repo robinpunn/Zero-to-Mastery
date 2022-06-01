@@ -65,7 +65,7 @@ const cleaner2 = arr => {
                 initial[initial.length -1].push(current)
             } else {
                 // otherwise check if current type of matches index +1
-                // if ues, push into array of array, otherwise push into array
+                // if yes, push into array of array, otherwise push into array
                 initial.push(typeof current === typeof arr[index+1] ? [current] : current)
             }
             // return initial, which will be an array
