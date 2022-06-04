@@ -57,20 +57,3 @@ let findPairs = (arr,number) => {
 
 
 
-
-// let findPairs = (arr,number) => {
-//     // create a new array with sort and reduce to be returned
-//     let newArray = arr
-//         // sort array in ascending order
-//         .sort((a,b) => a-b)
-//         // use reduce to cycle through all values
-//         .reduce((initial, current) =>{
-//             arr.map((num,ind) =>{
-//                 if (current + arr[ind+1] === number) {
-//                     initial.push([current,arr[ind+1]])
-//                 }
-//             })
-//         return initial
-//         },[])
-//     return newArray
-// }
