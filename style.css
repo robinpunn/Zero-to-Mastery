@@ -1,0 +1,53 @@
+body {
+    margin: auto 0;
+}
+
+.grid {
+    background:  #BFF;
+    transition: all 0.3s linear;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+}
+
+/* NAV */
+nav {
+    display: flex;
+    margin: 0;
+}
+
+.left {
+    margin-left: 65vw;
+}
+
+/* LIST */
+ul{
+    list-style: none;
+    display: flex;
+}
+
+li {
+    padding: 20px;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* CENTER */
+.center {
+    display: flex;
+    height: 100vh;
+}
+
+.cover {
+    width: 100%;
+    object-fit: cover;
+}
+
+/* FOOTER */
+#foot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
