@@ -1,42 +1,33 @@
 body {
-    text-align: center;
-    background-image: linear-gradient(to right, green, blue);
+    margin: 0px;
 }
 
-.flex {
+.container {
     display: flex;
-    flex-flow: row wrap;
+    flex-wrap: wrap;
     justify-content: center;
 }
 
-.head {
-    flex-grow: 4;
-    font-size: 2rem;
-    color: red;
-    width: 100%;
+h1 {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 3em;
+    border-bottom: 2px solid purple;
+    border-right: 2px solid purple;
+    width: 500px;
+    text-align: center;
+    box-shadow: 4px 4px 5px #888888;
+    margin-top: 10px;
 }
 
-.mon {
-    display: flex;
-    justify-content: space-evenly;
-    width: 100%;
+img {
+    width: 450px;
+    height: 300px;
+    margin: 10px;
+    transition: all 1s;
+    box-shadow: 2px 2px 2px #888888;
 }
 
-
-.poke {
-    font-size: 1.3rem;
+img:hover {
+    transform: scale(1.1);
+    box-shadow: 4px 4px 5px #888888;
 }
-
-button {
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    border: 1px solid red;
-    background-image: linear-gradient(to top, white, red);
-}
-
-button:hover {
-    background-image: linear-gradient(to bottom, white, red);
-}
-    
- 
