@@ -278,3 +278,95 @@
 12. PWA - Final Thoughts
     - The goal of of PWA is to make the site faster for the user
     - The site should be responsive and work offline
+
+### Testing
+1. Overview
+    - Testing is a method in software development where individual units of source code, assets, or programs are tested to deteremine whether they work properly
+    - Tests can negatively impact performance, but they can help avoid bugs
+2. Types of tests
+    - Tests can be grouped into 3 categories
+        - Unit tests
+        - Integration tests
+        - End to end tests
+    - Unit tests are the cheapest and easiest tests to run and write
+    - Integration tests how different parts of the application work together
+    - Automation tests, or UI tests, can be performed by individuals or code
+    - Going down the line, these tests become more expensive to implement
+3. Testing Libraries
+    - Scaffolding is a tool that can be used to create a testing environment
+    - Assertion libraries are used to verify that the code is working as expected
+    - Test runners are used to run the tests
+        - Puppeteer is a library that acts as a headless browser
+        - JSdom has DOM-like API that can be used to test code
+    - Mock, stub, and spy libraries are used to create fake objects
+        - Spies provide information on functions
+        - Stubbing is when a function is replaced with a fake function
+        - Mocking is when a function is replaced with a fake function that can be controlled
+    - Code coverage tools are used to determine how much of the code is being tested
+4. Unit Tests
+    - Should cover all small pure functions that take an input and return an output
+        - A pure function is a function that has no side effects, is deterministic, and does not mutate the input
+    - Unit tests don't test the contract(the connection between the function and the outside world)
+    - Writing clean functional components makes it easier to write unit tests
+5. Integration Tests
+    - Deal with cross communication between different units of code
+    - Integration tests are more expensive to write and maintain
+6. Automation Tests (end to end tests)
+    - UI tests that are running in a browser or a browserlike environment
+    - Can be used to test the user experience
+    - Compared to the other tests, these are the most expensive to write and maintain
+        - Most likely will only be used by large companies
+    - Two different testing processes: 1) unit and integration tests 2) automation tests
+        - Unit and integration tests would run often (like every commit)
+        - Automation tests would run less often (like once a day)
+---
+
+[Jest Cheatsheet](https://github.com/sapegin/jest-cheat-sheet)
+
+---
+
+7. Mocks and spies
+    - We can use "mocks" to let us "spy" on the behavior of a function that is called indirectly by the code we're testing
+    - Mocks are fake functions with pre-programmed behavior
+    - Spies are functions that record arguments, return values, the value of this and exceptions thrown
+8. [Enzyme](https://enzymejs.github.io/enzyme/)
+    - Enzyme is a testing library that can be used to test React components created by Airbnb
+    ```js
+    //setupTests.js
+    import { configure } from 'enzyme';
+    import Adapter from 'enzyme-adapter-react-16';
+    configure({ adapter: new Adapter() });
+    ```
+    ```js
+    //Card.test.js
+    import { shallow, mount, render } from 'enzyme';
+    import React from 'react';
+    import Card from './App';
+
+    it('expect to render Card component', ()=> {
+        expect(shallow(<Card />).lengthtoEqual(1));
+    })
+    ```
+    - Shallow rendering is used to render a component without rendering its children, will be used most often
+    - Mount performs a full DOM rendering and is used to test interaction with the DOM
+    - Render is used to generate static HTML using the Cheerio library
+    - [Api Reference](https://enzymejs.github.io/enzyme/docs/api/)
+9. Snapshot Testing
+    ```js
+    //Card.test.js
+    import { shallow, mount, render } from 'enzyme';
+    import React from 'react';
+    import Card from './App';
+
+    it('expect to render Card component', ()=> {
+        expect(shallow(<Card />)).toMatchSnapshot();
+    })
+    ```
+    - Snapshot testing is a feature of Jest that automatically generates text snapshots of your components and saves them to a file
+    - It becomes easier to run tests, if we write modular code with small components
+
+### Typescript
+1. Overview
+    - JavsScript is a dynamically typed language and TypeScript makes it a statically typed language
+2. Dynamic vs Static Typing
+    ![Dynamic vs Static](https://res.cloudinary.com/practicaldev/image/fetch/s--6V6DK8ku--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://miro.medium.com/max/1400/1%2ABddwVWW6hFU0miT9DCbUWQ.png)
