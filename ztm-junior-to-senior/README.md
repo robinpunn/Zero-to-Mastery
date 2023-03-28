@@ -370,3 +370,120 @@
     - JavsScript is a dynamically typed language and TypeScript makes it a statically typed language
 2. Dynamic vs Static Typing
     ![Dynamic vs Static](https://res.cloudinary.com/practicaldev/image/fetch/s--6V6DK8ku--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://miro.medium.com/max/1400/1%2ABddwVWW6hFU0miT9DCbUWQ.png)
+    - Dynamic typing is when the type of a variable is determined at runtime
+    - Static typing is when the type of a variable is determined at compile time
+    ```js
+    //Dynamic typing
+    let a = 1;
+    a = 'hello';
+    ```
+    ```js
+    //Static typing
+    let a: number = 1;
+    a = 'hello'; //error
+
+    function add(a: number, b: number) {
+        return a + b;
+    }
+    ```
+    - Statically Typed pros:
+        - Statically typed langauages are "self documenting", they can be used to catch errors before they happen
+        - Help with auto completion in IDEs
+        - Produce less bugs in production as code will fail to compile if there are any errors
+    - Statically Typed cons:
+        - Statically typed languages are more verbose
+        - May lead to bad habit of overlooking unit tests as the compiler will catch errors
+        - Slower development process because of the extra time it takes to write the types
+    - Static typing will generally produce less bugs while dynamic typing allows flexibility
+    - Typescript allows JavaScript to behave like a statically typed language
+3. Weak vs Strong Typing
+    - JavaScript is a dynamic language that is weakly typed language
+    ```js
+    //Weakly typed
+    var a = "hello";
+    a + 1; // "hello1"
+    ```
+    ```py
+    //Strongly typed
+    a = "hello"
+    a + 1 #error
+    ```
+4. Static Typing in JavaScript
+    - There are more languages like TypeScript that allow JavaScript to be statically typed
+        - ReasonML created by Facebook uses OCaml to create a statically typed language that compiles to JavaScript
+        - Flow created by Facebook is a static type checker for JavaScript
+        - Elm created by Evan Czaplicki is a functional programming language that compiles to JavaScript
+    - If your project is growing and you already have tests written, it may be worth it to add static typing to your project
+
+---
+
+#### [Typescript](https://www.typescriptlang.org/)
+
+---
+
+5. TypeScript Compiler
+    - TypeScript is a superset of JavaScript that compiles to plain JavaScript
+    - Node.js is required to run the TypeScript compiler
+    ```bash
+    npm install -g typescript
+    ```
+6. TypeScript
+    - The TypeScript compiler works similarl to the Babel compiler and can be used to compile TypeScript to JavaScript
+        - Allows us to use the latest features of JavaScript
+    - Errors are caught at compile time and never make it to production
+    [TypeScript Editor Support](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Editor-Support)
+
+7. TypeScript 2
+    - Initialize a TypeScript project
+    ```bash
+    tsc --init
+    ```
+    - The TypeScript compiler will look for a tsconfig.json file in the root directory of the project
+        - The tsconfig.json file contains the configuration for the TypeScript compiler with many options
+    [What is tsconfig](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
+    - Set to watch mode
+    ```bash
+    tsc -typescript.ts --watch
+    ```
+8. TypeScript 3
+    - When declaring a variable, we can specify the type of the variable
+    ```js
+    //TypeScript
+    let a: number = 1;
+    let b: string = 'hello';
+    let c: boolean = true;
+    let d: number[] = [1, 2, 3];
+    let e: Array(string) = ['a', 'b', 'c'];
+    let f: object = {a: 1, b: 2};
+    let g: undefined = undefined;
+    let h: null = null;
+    ```
+9. TypeScript 4
+    - TypeScript allows for types that normally don't exist in JavaScript
+        - Tuples are arrays with a fixed number of elements
+        - Enums are a way of giving more friendly names to sets of numeric values
+10. TypeScript 5
+    - Be careful when using the any type
+        - The any type is a way of telling the TypeScript compiler to not check the type of a variable
+        - The any type is useful when working with external libraries that are not written in TypeScript
+        - Having too many any types is improper use of TypeScript
+    - Void is the opposite of any, the absence of having any type at all
+    - Never is the type of variables that never return a value
+11. TypeScript 6
+    - Interfaces are a way of describing the structure of an object
+        - Interfaces give a new name that can be used anywhere
+    - Type aliases are a way of giving a name to a type
+        - Type aliases don't create a new name like interfaces
+    -[Interface vs Type Alias - Medium](https://medium.com/@martin_hotell/interface-vs-type-alias-in-typescript-2-7-2a8f1777af4c)
+    -[Interface vs Type Alias - StackOverflow](https://stackoverflow.com/questions/37233735/interfaces-vs-types-in-typescript)
+12. TypeScript 7
+    - Type assertions allow us to override the type of a variable
+    - [Type Assertion](https://basarat.gitbook.io/typescript/type-system/type-assertion)
+13. TypeScript 8
+    - Functions in TypeScript can have optional parameters
+    - Classes in TypeScript can have optional parameters in the constructor
+14. TypeScript 9
+    - Union types allow us to specify multiple types for a variable
+15. TypeScript 10
+    - Type inference is a way of inferring the type of a variable based on the value
+16. [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)
