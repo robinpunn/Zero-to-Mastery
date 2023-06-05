@@ -59,6 +59,7 @@
     - [Exercise 1 Stacks and Queues](#exercise-1-stacks-and-queues)
     - [How JavaScript works (optional)](#how-javascript-works-optional)
     - [Stacks and Queues Review](#stacks-and-queues-review)
+1. [Data Structures: Trees](#data-structures-trees)
 ---
 
 ---
@@ -519,3 +520,150 @@
     - Slow lookup
 - Stacks and Queues can be built with arrays or linked lists
     - It may not be a good idea to build a queue with an array because you have to shift the array every time you dequeue
+
+---
+### Data Structures: Trees
+#### Trees Introduction
+- Trees are data structures that have a hierachical structure
+    - as opposed to linked lists or arrays which are linear
+    - trees can have 0  or more child nodes
+- A tree usually starts with a root or parent node
+    - All children in the tree descend from the root node
+    - Every child of a node descends from only one parent
+- Trees have a unidirectional parent-child relationship
+- Leaf nodes are the very end of a tree data structure
+- Trees can have subtrees
+- The DOM is a tree data structure
+- Like linked lists, trees use the concept of nodes
+    - Nodes can contain any type of information that we want
+    - Linked lists are technically a type of tree
+    - However, in trees nodes can only point to children and they don't have to reference the parent
+- There are [many tree data structures](https://en.wikipedia.org/wiki/List_of_data_structures#Trees)
+
+#### Binary Tree
+- In a binary tree, each node can only have either 0,1, or 2 child nodes
+    - Each child can only have one parent
+- A "full" tree has no gaps in the tree
+- In a **perfect binary tree**, every node either has 0 children or 2 children
+    - The bottom layer of the tree is completely filled
+    - This type of binary tree is extremely efficient and desirable
+    - Two important properties:
+        1. The number of total nodes doubles as we move down the tree
+        1. The number of nodes on the last level is equal to the sum of the number of nodes on all the other levels + 1
+            - half of the nodes are on the last level and the data is split in half
+- In a **full binary tree**, every node has 0 or 2 children, never 1 child
+- Binary trees introduce a new Big O notation, O(log N)
+- Big(O)
+    - lookup: O(log N)
+    - insert: O(log N)
+    - delete: O(log N)
+
+#### O(log n)
+- Because of the way binary trees are structured, we can calculated the amount of node that they have
+- We use two the power of the level
+```js
+Level 0: 2^0 = 1
+Level 1: 2^1 = 2
+Level 2: 2^2 = 4
+Level 2: 2^3 = 8
+```
+- The formula is: ``# of nodes = 2^h - 1``... h = height
+    - This is further simplified to: ``log nodes = height(steps)``
+        - log 100 = 2 // 10^2 = 100
+- Based on the height of the tree, the maximum amount of decisions we make is log(n)
+- Binary search trees allow a "divide and conquer approach"
+- O(log n) is more efficient that O(n)
+
+#### Binary Search Tree
+- The binary search tree is the most common tree data structure
+- This data structure preserves relationships
+
+**RULES**
+1. All child nodes to the right of the root node must be greater than the current node
+2. A node can only have up to two children
+
+- The advantage of a binary search tree is that lookup is very easy
+- [Binary Search Tree example](https://visualgo.net/en/bst?slide=1)
+
+#### Balanced vs Unbalanced BST
+- If adding values that are increasing, the binary tree is unbalanced
+    - An unbalanced binary tree can resemble a linked list
+    - lookup, insert, and delete become O(n) just like in a linked list
+- An interview question might be why an unbalanced binary search tree is bad
+    - Ideally, we want binary search trees to be balanced to get the benefit of O(log n)
+- There are algorithms that can help balance a binary tree... it's an advanced concept
+    - Some options include AVL trees and Red Black trees which allow binary search trees to be balanced
+        - In most programming languages, these are built in
+
+#### BST Pros and Cons
+**Pros**
+- Better than O(n)
+- Ordered
+- Flexible size
+
+**Cons**
+- No O(1) operations
+
+- Binary search trees aren't the fastest for anything
+- On average, an array or hash table will have faster operation
+    - But there are certain conditions where they do outperform arrays and hash tables
+- Binary search trees perform really well as long as they are balanced and edge cases are avoided
+
+#### AVL Trees + Red Black Trees
+- In production, AVL trees or Red Black trees are most likely to be encountered as they rebalance themselves
+- AVL Trees:
+    - [Animation](https://www.cs.usfca.edu/~galles/visualization/AVLtree.html)
+    - [How it Works](https://medium.com/basecs/the-little-avl-tree-that-could-86a3cae410c7)
+- Red Black Trees:
+    - [Animation](https://www.cs.usfca.edu/~galles/visualization/RedBlack.html)
+    - [How it Works](https://medium.com/basecs/painting-nodes-black-with-red-black-trees-60eacb2be9a5)
+
+#### Binary Heaps
+- Two common type of tree is a heap
+    - Heaps have a binary version called binary heaps which only have to children per node
+- In a binary tree every child belongs to a parent node that has a greater priority or value
+    - This is known as a "max heap"
+    - In a "min heap", the root node is the smallest
+- A heap can be used in any alogrithm where ordering is important
+    - It is commonly used when it comes to priority queues
+- Heaps don't have O(1) or O(log n) random access, they are less ordered than binary search trees
+- In a heap, left and right can be any value relative to the parent as long as it's less than the parent
+- Big (O)
+    - lookup: O(n)
+    - insert: O(log N)
+    - delete: O(log N)
+- Binary Heaps are great at comperative operations
+- Heaps add value in trees from left to right and then bubbles up
+    - In a best case, an insert can be O(1) and O(log N) in the worst case
+
+**Memory Heap != Heap Data Structure**
+
+#### Priority Queue
+- The advantage of Binary Heaps is that they take up the least amount of space possible
+    - This is due to left to right insertion
+- Binary Heaps are extremely useful for priority queues
+    - With queues, we follow FIFO
+    - In priority queues, each element has a priority
+        - Elements with higher priorities are served first
+**Pros**
+- Better than O(n)... execept for lookup
+- Priority
+- Flexible size
+- Fast Insert
+
+**Cons**
+- Slow lookup
+
+- Binary Heaps are good when you're interested in finding the max or min
+    - Binary heaps often have a findMax or findMin method that are O(1)
+
+#### Trie
+- A trie is a specialized tree used in searching, most often with text
+- In most searches it can outperform binary search trees, hashes, and most other data structures that have been covered thusfar
+- Tries allow you to know if a word or part of a word exists in a body of text
+- Tries usually have an empty root node
+    - From there letters are added which can have multiple children
+- Tries are good for providing auto suggestions in search engines or IP routing
+- The benefit of tries are speed and space
+- Big(O) of a trie is O(length of word)
+- Tries are also advantageous in terms of space complexity because of their use of "prefixes" and use of child nodes
