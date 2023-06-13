@@ -60,6 +60,20 @@
     - [How JavaScript works (optional)](#how-javascript-works-optional)
     - [Stacks and Queues Review](#stacks-and-queues-review)
 1. [Data Structures: Trees](#data-structures-trees)
+    - [Trees Introduction](#trees-introduction)
+    - [Binary Tree](#binary-tree)
+    - [O(log n)](#olog-n)
+    - [Binary Search Tree](#binary-search-tree)
+    - [Balanced vs Unbalanced BST](#balanced-vs-unbalanced-bst)
+    - [BST Pros and Cons](#bst-pros-and-cons)
+    - [AVL Trees + Red Black Trees](#avl-trees--red-black-trees)
+    - [Binary Heaps](#binary-heaps)
+    - [Priority Queue](#priority-queue)
+    - [Trie](#trie)
+1. [Data Structures: Graphs](#data-structures-graphs)
+    - [Graphs Introduction](#graphs-introduction)
+    - [Types of Graphs](#types-of-graphs)
+    - [Graph Data](#graph-data)
 ---
 
 ---
@@ -667,3 +681,29 @@ Level 2: 2^3 = 8
 - The benefit of tries are speed and space
 - Big(O) of a trie is O(length of word)
 - Tries are also advantageous in terms of space complexity because of their use of "prefixes" and use of child nodes
+
+---
+### Data Structures: Graphs
+#### Graphs Introduction
+- Graphs are one of the most used data structures when it comes to modeling real life
+- Graphs are a set of values that are related with a pair relationship
+- Each item in a graph is called a node or vertex
+- Nodes are connected with edges
+- Graphs are good to represent real world relationships represented by links
+- Graphs encompass data strucutres such as trees and linked lists
+    - Linked lists are a type of tree and trees are a type of graph
+
+#### Types of Graphs
+- There are many graphs, but there are certain characteristics that allow us to describe graphs
+- Two key descriptors are **Directed** and **Undirected** graphs
+- Directed graphs can be thought of as unidirectional whereas undirected graphs aren't bound by those rules
+- Another way to describe graphs is **unweighted** and **weighted**
+    - Values can be applied to various aspects of graphs, not just the nodes
+    - Weighted graphs are used a lot in calculating optimal paths
+- Lastly, another common way to describe graphs is **cyclic** or **acyclic**
+    - Vertices connected in a cyclic manner are what define cyclic graphs
+- Directed Acyclic Graph goes in one direction...
+
+#### Graph Data
+- Graphs are built on top of other data structures
+- A DAG can be thought of as composed of trees and linked lists
