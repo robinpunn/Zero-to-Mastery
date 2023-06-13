@@ -1,20 +1,12 @@
-# Zeto to Mastery
 
 ---
+# Web Development Education
 
-### Notes for various Zero to Mastery coures
-
+### Notes from various web development education platforms
 ---
 
-#### Branches contain practice projects from the Complete Web Developer course
+### [Academind](https://github.com/robinpunn/webdev-education/tree/main/Academind)
 
-1. Javascript Challenges
-2. Portfolio
-3. Bootstrap Landing Page
-4. Poke-API
-5. Pictures
+### [freeCodeCamp](https://github.com/robinpunn/webdev-education/tree/main/freeCodeCamp)
 
-
-#### Complete Junior to Senior Web Developer Roadmap
-
-#### Master the Coding Interview: Data Structures + Algorithms
+### [ZeroToMastery](https://github.com/robinpunn/webdev-education/tree/main/ZeroToMastery)
