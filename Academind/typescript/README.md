@@ -134,6 +134,18 @@
     - [Using "declare" as a "last resort"](#using-declare-as-a-last-resort)
     - [No Types Needed: class-transformer](#no-types-needed-class-transformer)
     - [TypeScript embracing: class-validator](#typescript-embracing-class-validator)
+1. [Select and Share a Place App](#select-and-share-a-place-app)
+    - [Project Setup](#project-setup)
+    - [Getting User Input](#getting-user-input)
+    - [Using Axios](#using-axios)
+    - [Rendering a Map](#rendering-a-map)
+1. [React and TypeScript](#react-and-typescript)
+    - [Setting up a React TypeScript Project](#setting-up-a-react-typescript-project)
+    - [Working with Props and Types for Props](#working-with-props-and-types-for-props)
+    - [Getting User input with "refs"](#getting-user-input-with-refs)
+    - [Cross Component Communication](#cross-component-communication)
+    - [Working with State and Types](#working-with-state-and-types)
+    - [Managing State Better](#managing-state-better)
 ---
 
 ---
@@ -3388,4 +3400,197 @@ form.addEventListener('submit', searchAddressHandler);
 <script async
     src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
 </script>
+```
+
+---
+### React and TypeScript
+#### Setting up a React TypeScript Project
+```bash
+npm create vite@latest
+```
+- Chose React and TypeScript option
+- ``cd`` into created directory and ``npm install``
+- ``tsconfig.json`` is already setup:
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
+```
+
+#### Working with Props and Types for Props
+- We us ``React.FC`` to declare a React function component type
+```js
+// App.tsx
+import TodoList from "./components/TodoList"
+
+function App() {
+  const todos = [{id: 't1', text: 'generate income'}]
+
+  return (
+    <div className='App'>
+      {/* A component that adds todos*/}
+      <TodoList items={todos}/>
+    </div>
+  )
+}
+
+export default App
+
+// TodoList.tsx
+import React from 'react';
+
+interface TodoListProps {
+    items: {id:string, text:string}[]
+}
+
+const TodoList: React.FC<TodoListProps> = props => {
+    return (
+        <ul>
+            {props.items.map(todo => <li key={todo.id}>{todo.text}</li>)}
+        </ul>
+    )
+};
+
+export default TodoList;
+```
+
+#### Getting User input with "refs"
+```js
+import React, {useRef} from 'react'
+
+const NewTodo: React.FC = () => {
+    const textInputRef = useRef<HTMLInputElement>(null);
+
+    const todoSubmiteHandler = (event: React.FormEvent) => {
+        event.preventDefault()
+        const enteredText = textInputRef.current!.value;
+        console.log(enteredText)
+    }
+
+    return (
+        <form onSubmit={todoSubmiteHandler}>
+            <div>
+                <label htmlFor="todo-text">Todo Text</label>
+                <input type="text" id="todo-text" ref={textInputRef}/>
+            </div>
+            <button type="submit">ADD TODO</button>
+        </form>
+    )
+};
+
+export default NewTodo;
+```
+
+#### Cross Component Communication
+```js
+// NewTodos.tsx
+import React, {useRef} from 'react';
+
+interface NewTodoProps {
+    onAddTodo: (todoText: string) => void;
+}
+
+const NewTodo: React.FC<NewTodoProps> = props => {
+    const textInputRef = useRef<HTMLInputElement>(null);
+
+    const todoSubmiteHandler = (event: React.FormEvent) => {
+        event.preventDefault()
+        const enteredText = textInputRef.current!.value;
+        props.onAddTodo(enteredText)
+    }
+
+    return (
+        <form onSubmit={todoSubmiteHandler}>
+            <div>
+                <label htmlFor="todo-text">Todo Text</label>
+                <input type="text" id="todo-text" ref={textInputRef}/>
+            </div>
+            <button type="submit">ADD TODO</button>
+        </form>
+    )
+};
+
+export default NewTodo;
+
+// App.tsx
+import TodoList from "./components/TodoList"
+import NewTodo from "./components/NewTodo"
+
+function App() {
+  const todos = [{id: 't1', text: 'generate income'}]
+
+  const todoAddHandler = (text:string) => {
+    console.log(text)
+  };
+
+  return (
+    <div className='App'>
+      <NewTodo onAddTodo={todoAddHandler}/>
+      <TodoList items={todos}/>
+    </div>
+  )
+}
+
+export default App
+```
+
+#### Working with State and Types
+```js
+// App.tsx
+import {useState} from 'react';
+import TodoList from "./components/TodoList";
+import NewTodo from "./components/NewTodo";
+import { Todo } from './todo.model';
+
+function App() {
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  const todoAddHandler = (text:string) => {
+    setTodos([{id: Math.random().toString(), text: text}]);
+  };
+
+  return (
+    <div className='App'>
+      <NewTodo onAddTodo={todoAddHandler}/>
+      <TodoList items={todos}/>
+    </div>
+  )
+}
+
+export default App
+
+// todo.model.ts
+export interface Todo {
+    id: string,
+    text: string
+}
+```
+
+#### Managing State Better
+```js
+const todoAddHandler = (text:string) => {
+    setTodos(prevTodos => [...prevTodos, {id: Math.random().toString(), text: text}]);
+};
 ```

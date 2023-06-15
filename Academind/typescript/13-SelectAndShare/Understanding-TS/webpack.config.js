@@ -35,5 +35,5 @@ module.exports = {
       stream: require.resolve("stream-browserify"),
     },
   },
-  plugins: [new DotenvWebpack()],
+  // plugins: [new DotenvWebpack()],
 };

@@ -28,5 +28,5 @@ module.exports = {
       stream: require.resolve("stream-browserify"),
     },
   },
-  plugins: [new CleanPlugin.CleanWebpackPlugin(), new DotenvWebpack()],
+  plugins: [new CleanPlugin.CleanWebpackPlugin()],
 };
