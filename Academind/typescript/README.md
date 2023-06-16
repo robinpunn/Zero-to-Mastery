@@ -146,6 +146,12 @@
     - [Cross Component Communication](#cross-component-communication)
     - [Working with State and Types](#working-with-state-and-types)
     - [Managing State Better](#managing-state-better)
+1. [Node.js, Express, and TypeScript](#nodejs-express-and-typescript)
+    - [Executing TypeScript code with Node.js](#executing-typescript-code-with-nodejs)
+    - [Setting up a Project](#setting-up-a-project)
+    - [Finished Setup and Working With types](#finished-setup-and-working-with-types)
+    - [Adding Middleware and Types](#adding-middleware-and-types)
+    - [Wrap Up](#wrap-up-2)
 ---
 
 ---
@@ -3594,3 +3600,125 @@ const todoAddHandler = (text:string) => {
     setTodos(prevTodos => [...prevTodos, {id: Math.random().toString(), text: text}]);
 };
 ```
+
+---
+### Node.js, Express, and TypeScript
+#### Executing TypeScript code with Node.js
+- Node is not capable of executing TS, but it doesn't care about the file extension
+    - Whatever it finds in a TS file, it treats as regular JS
+- We can use [Ts-Node](https://github.com/TypeStrong/ts-node) library
+    - This solution can be good for development, but it is not ideal for production
+
+#### Setting up a Project
+- All we really need to do is create ``.ts`` files and compile them with ``tsc``... then execute the ``.js`` file
+```bash
+npm init -y
+tsc --init
+```
+```js
+ "moduleResolution": "node",  /* Specify how TypeScript looks up a file from a given module specifier. */
+```
+```bash
+npm install --save express body-parser
+```
+
+#### Finished Setup and Working With types
+```bash
+npm install --save-dev @types/node
+npm install --save-dev @types/express
+```
+```js
+import express from 'express';
+
+const app = express();
+
+app.listen(3000);
+```
+
+#### Adding Middleware and Types
+```js
+// routes/todo.ts
+
+import { Router } from 'express';
+
+import { createTodo, getTodos, updateTodo, deleteTodo } from '../controllers/todos'
+
+const router = Router();
+
+router.post('/', createTodo);
+
+router.get('/', getTodos);
+
+router.patch('/:id', updateTodo);
+
+router.delete('/:id', deleteTodo);
+
+export default router;
+```
+
+```js
+// controllers/todo.ts
+
+import {RequestHandler} from 'express';
+
+import {Todo} from '../models/todos'
+
+const TODOS: Todo[] = [];
+
+export const createTodo: RequestHandler = (req, res, next) => {
+    const text = (req.body as {text:string}).text;
+    const newTodo = new Todo(Math.random().toString(), text);
+
+    TODOS.push(newTodo);
+
+    res.status(201).json({message: 'Created the todo', createdTodo: newTodo})
+};
+
+export const getTodos: RequestHandler = (req, res, next) => {
+    res.json({todos: TODOS})
+};
+
+export const updateTodo: RequestHandler<{id: string}> = (req,res,next) => {
+    const todoId = req.params.id;
+
+    const updatedText = (req.body as {text: string}).text;
+
+    const todoIndex = TODOS.findIndex(todo => todo.id === todoId);
+
+    if (todoIndex < 0) {
+        throw new Error('Could not find todo');
+    }
+
+    TODOS[todoIndex] = new Todo(TODOS[todoIndex].id, updatedText);
+
+    res.json({message: 'Updated', updatedTodo: TODOS[todoIndex]})
+}
+
+export const deleteTodo: RequestHandler = (req,res,next) => {
+    const todoId = req.params.id;
+
+    const todoIndex = TODOS.findIndex(todo => todo.id === todoId);
+
+    if (todoIndex < 0) {
+        throw new Error('Could not find todo');
+    }
+
+    TODOS.splice(todoIndex, 1);
+
+    res.json({message: 'Todo deleted'});
+}
+```
+```js
+// models/todos.ts
+
+export class Todo {
+    constructor(public id: string, public text: string) {}
+}
+```
+
+#### Wrap Up
+- Node and Express require us to download ``@types`` libraries for TS support
+- We write code like we would normally write it but export/import syntax is different
+- [Nest.js](https://docs.nestjs.com/) is a great option to use with TS
+    - A node.js framework that embraces TS
+- Nest.js offers TS support out of the box
