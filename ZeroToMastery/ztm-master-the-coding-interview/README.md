@@ -74,6 +74,9 @@
     - [Graphs Introduction](#graphs-introduction)
     - [Types of Graphs](#types-of-graphs)
     - [Graph Data](#graph-data)
+    - [Graphs Review](#graphs-review)
+1. [Algorithms: Recursion](#algorithms-recursion)
+    - [Introduction to Algorithms](#introduction-to-algorithms)
 ---
 
 ---
@@ -707,3 +710,65 @@ Level 2: 2^3 = 8
 #### Graph Data
 - Graphs are built on top of other data structures
 - A DAG can be thought of as composed of trees and linked lists
+
+#### Graphs Review
+- In interviews, graphs aren't as big of a topic because they take time
+- Graphs are great for relationships
+- However, scaling requires a lot of resources
+- Most likely, we will use tools like [neo4j](https://neo4j.com/) that allow us to build fast, graph databases
+
+---
+### Algorithms: Recursion
+#### Introduction to Algorithms
+- Algorithms are functions... a two line function is a technically an algorithm
+- Algorithms are steps in a process we take to perform a desired action
+- [List of algorithms](https://en.wikipedia.org/wiki/List_of_algorithms)
+- Algorithms allos us to use data structures to perform actions on that data
+> Data Structures + Algorithms = Programs
+> Class{} + function() = Program
+
+**Data Structures**
+- Arrays
+- Stacks
+- Queues
+- Linked Lists
+- Trees
+- Tries
+- Graphs
+- Hash Tables
+
+**Algorithms**
+- Sorting
+- Dynamic Programming
+- BFS + DFS (searching)
+- Recursion
+
+- Big(O) and scalability is important as data gets larger and larger
+    - Certain algorithms allows us to simplify our Big(O) complexity into smaller/better time complexity
+    - For example, a function of O(n^2) can be reduced to O(n log n) with the right algorithm
+
+#### Recursion Introduction
+- Technically, recursion isn't an algorithm... it is more of a concept
+- Recursion is when you define something in terms of itself
+    - It is a function that refers to itself inside the function
+```js
+function inception() {
+    inception();
+}
+```
+- Recursion is good for tasks that have repeated subtasks
+- The concept of recursion is used in searching and sorting algorithms
+```js
+function traverse(node) {
+  const tree = { value: node.value };
+  tree.left = node.left === null ? null : traverse(node.left);
+  tree.right = node.right === null ? null : traverse(node.right);
+  return tree;
+}
+```
+
+#### Stack Overflow
+- Recursive functions can lead to the concept of [stack overflow](https://en.wikipedia.org/wiki/Stack_overflow)
+- There is a ``call stack`` that functions based on memory... adding to much to the stack uses up all memeory
+- One of the biggest problems with recursion is causing a ``stack overflow``
+    - Recursion has to hold onto the individual calls in the ``call stack``
