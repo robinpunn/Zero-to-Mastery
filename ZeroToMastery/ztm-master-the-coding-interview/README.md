@@ -772,3 +772,43 @@ function traverse(node) {
 - There is a ``call stack`` that functions based on memory... adding to much to the stack uses up all memeory
 - One of the biggest problems with recursion is causing a ``stack overflow``
     - Recursion has to hold onto the individual calls in the ``call stack``
+
+#### Anatomy of Recursion
+- Every recursive function needs to have a "base case" (stop point)
+- Recursive functions have two paths
+    1. Recursive case (call the function)
+    2. Base case (stop calling the function)
+
+**3 Rules to build a recursive function**
+1. Identify the base case
+2. Identify the recursive case
+3. Get closer to base case and return when base case is true
+
+- Some recursive functions can have exponential time
+    - Big(O) = O(2^n)
+    - Dynamic programming and memoization can improve to O(n)
+
+#### Recursive vs Iterative
+- Anything you do with recursion can be done iteratively (loop)
+- Recursion can make code DRY and readable, but it creates a large stack (memory footprint)
+- Iterative solution may not be as readable, but they tend to be more efficient because they don't make additional function calls
+- Recursion can be effective when working with data structures with an unkown depth (trees, traversal)
+**Tail Call Optimization**
+Allows recursion without increasing call stack
+
+#### When to use recursion
+- Traversing or searching trees or graphs can be optimal with recursion
+- Every time you're using a tree or converting something into a tree, consider recursion
+    1. Divide into a number of sub problems that are smaller instances of the same problem
+    2. Each instance of the sub problem is identical in nature
+    3. The solution of each sub problem can be combined to solve the problem at hand
+- Divide and conquer using recursion
+
+#### Recursion Review
+- A function that calls itself
+- Good because it can maintain state at different levels of recursion
+- The stack gets filled with functions and is removed one by one until we have our final return
+- With recursion, we have to be wary of stack overflows
+- Use recursion when it makes code more readable
+    - It can however, be less efficient than an iterative solution
+- Anything you can do with recursion you can do iteratively
