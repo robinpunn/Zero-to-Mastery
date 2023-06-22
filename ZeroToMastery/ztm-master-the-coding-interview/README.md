@@ -77,6 +77,13 @@
     - [Graphs Review](#graphs-review)
 1. [Algorithms: Recursion](#algorithms-recursion)
     - [Introduction to Algorithms](#introduction-to-algorithms)
+    - [Recursion Introduction](#recursion-introduction)
+    - [Stack Overflow](#stack-overflow)
+    - [Anatomy of Recursion](#anatomy-of-recursion)
+    - [Recursive vs Iterative](#recursive-vs-iterative)
+    - [When to use recursion](#when-to-use-recursion)
+    - [Recursion Review](#recursion-review)
+
 ---
 
 ---
@@ -812,3 +819,49 @@ Allows recursion without increasing call stack
 - Use recursion when it makes code more readable
     - It can however, be less efficient than an iterative solution
 - Anything you can do with recursion you can do iteratively
+
+---
+### Algorithms: Sorting
+#### Sorting Introduction
+- When inputs get larger, sorting is more complicated
+- Most big companies have some form of sorting involved
+- There are various [sorting algorithms](https://en.wikipedia.org/wiki/Sorting_algorithm) available outside of the ``.sort()`` methods available in programming languages
+- Sorting and searching are two of the bigger problems in computer science
+
+**Types of Sorting**
+- Bubble Sort
+- Insertion Sort
+- Selection Sort
+- Merge Sort
+- Quick Sort
+
+#### The issue with sort()
+- We can't always trust that the built in sort method will sort data correctly
+
+```js
+const basket = [1, 65, 34, 2, 1, 7, 8];
+basket.sort() // [1,2,2,34,65,7,8]
+```
+- In JavaScript, the [sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) method converts elements to strings before sorting
+
+- The [localeCompare](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare) method can be used when sorting letters with accents
+
+```js
+spanish.sort(function(a,b) {
+    return a.localeCompare(b);
+})
+```
+
+#### Sorting Algorithms
+- Sorting algorithms have their own tradeoffs
+    - They each have their own time complexity and space complexity tradeoffs
+- [Sorting Algorithms Animations](https://www.toptal.com/developers/sorting-algorithms)
+- Sorting algorithms perform differently based on the inputs
+
+#### Bubble Sort
+- Bubble sort is one of three "elementary sorts" (insertion, selection)
+- Bubble sort comes from the idea of "bubbling up" the largest value using multiple pass throughs
+    - Bubble sort is not very efficient because of the 'multiple pass through' nature, but it is very simple
+- Bubble sort:
+    - Time complexity: O(n^2)
+    - Space complexity: O(1)
