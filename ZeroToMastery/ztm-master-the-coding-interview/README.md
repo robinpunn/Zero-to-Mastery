@@ -865,3 +865,18 @@ spanish.sort(function(a,b) {
 - Bubble sort:
     - Time complexity: O(n^2)
     - Space complexity: O(1)
+
+#### Selection Sort
+- Selection sort is another one of the simpler ways to sort a list
+- The algorithm works by scanning a list of elements for the smallest item and swapping it with the element in the first position
+- Selection sort:
+    - Time complexity: O(n^2)
+    - Space complexity: O(1)
+
+#### Insertion Sort
+- Insertion sort is also not the most efficient, but in some cases it is extremely fast
+- Insertion sort is useful when the list is almost sorted
+- It performs well with small data sets
+- Insertion sort:
+    - Time complexity: O(n^2)
+    - Space complexity: O(1)
