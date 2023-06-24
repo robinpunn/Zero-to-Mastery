@@ -862,14 +862,14 @@ spanish.sort(function(a,b) {
 - Bubble sort is one of three "elementary sorts" (insertion, selection)
 - Bubble sort comes from the idea of "bubbling up" the largest value using multiple pass throughs
     - Bubble sort is not very efficient because of the 'multiple pass through' nature, but it is very simple
-- Bubble sort:
+- **Bubble sort**:
     - Time complexity: O(n^2)
     - Space complexity: O(1)
 
 #### Selection Sort
 - Selection sort is another one of the simpler ways to sort a list
 - The algorithm works by scanning a list of elements for the smallest item and swapping it with the element in the first position
-- Selection sort:
+- **Selection sort**:
     - Time complexity: O(n^2)
     - Space complexity: O(1)
 
@@ -877,6 +877,56 @@ spanish.sort(function(a,b) {
 - Insertion sort is also not the most efficient, but in some cases it is extremely fast
 - Insertion sort is useful when the list is almost sorted
 - It performs well with small data sets
-- Insertion sort:
+- **Insertion sort**:
     - Time complexity: O(n^2)
     - Space complexity: O(1)
+
+### Merge Sort and O(n log n)
+- Merge sort (like quick sort) uses the divide and conquer approach with the use of recursion
+    - This method usually provides a logn advantage
+- Merge sort takes a list and divides it in half continuosly until there are single elements
+    - The single elements are compared and the list is merged back into one until it is sorted
+- Merge sort is one of thore effecient methods of sorting and typically performs better than other sorting algorithms
+- **Merge sort**:
+    - Time complexity: O(n log(n))
+    - Space complexity: O(n)
+- Merge sort is a "stable algorithm": [stack overflow explanation](https://stackoverflow.com/questions/1517793/what-is-stability-in-sorting-algorithms-and-why-is-it-important)
+    - A sorting algorithm is said to be stable if two objects with equal keys appear in the same order in sorted output as they appear in the input array to be sorted.
+    - Some sorting algorithms are stable by nature like Insertion sort, Merge Sort, Bubble Sort, etc. And some sorting algorithms are not, like Heap Sort, Quick Sort, etc.
+
+#### Quick Sort
+- Like merge sort, quick sort is a divide and conquer algorithm
+- Quick sort uses a pivoting technique to break the main list into smaller lists
+    - The smaller lists use the pivoting technique until they're sorted
+- **Quick sort**:
+    - Time complexity: O(n^2)
+    - Space complexity: O(log(n))
+- Quick sort and merge sort are probably the two most used sorting algorithms
+- Quick sort is usually the fastest, but it has bad worst case behaviors
+
+#### Which Sort is Best
+- **Insertion sort** should be used with a small amount of items or almost sorted items
+    - It uses very little space and is easy to implement in code
+- **Bubble sort** is not used very often
+- **Selection sort** like bubble sort is not very efficient and won't be used that often
+- **Merge sort** should be used when we're worried about worst case scenarios
+    - However, if worried about memory, merge sort is very expensive
+- **Quick sort** is one of the more popular sorting algorithms, but compared to merge sort, its downside is the worst case scenario
+    - If the pivot isn't picked properly, the sorting could be very slow
+- **Heap sort**:
+    - Time complexity: O(n log(n))
+    - Space complexity: O(1)
+- While heap sort does have favorable worst case scenarios, it is slower in most cases
+
+#### Heap Sort
+- [Heap sort](https://brilliant.org/wiki/heap-sort/)
+    - Heap sort is a comparison-based sorting algorithm that uses a binary heap data structure.
+    - Like mergesort, heap sort has a running time of O(n log(n))
+    - and like insertion sort, heap sort sorts in-place, so no extra space is needed during the sort.
+- [quick sort vs heap sort SO](https://stackoverflow.com/questions/2467751/quicksort-vs-heapsort)
+    - Heapsort is O(N log N) guaranted, what is much better than worst case in Quicksort.
+        - Heapsort doesn't need more memory for another array to putting ordered data as is needed by Mergesort.
+        - So why do comercial applications stick with Quicksort? What Quicksort has that is so special over others implementations?
+    - I've tested the algorithms myself and I've seen that Quicksort has something special indeed.
+        - It runs fast, much faster than Heap and Merge algorithms.
+        - The secret of Quicksort is: It almost doesn't do unnecessary element swaps. Swap is time consuming.
