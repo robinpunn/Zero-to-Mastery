@@ -83,7 +83,19 @@
     - [Recursive vs Iterative](#recursive-vs-iterative)
     - [When to use recursion](#when-to-use-recursion)
     - [Recursion Review](#recursion-review)
-
+1. [Algorithms: Sorting](#algorithms-sorting)
+    - [Sorting Introduction](#sorting-introduction)
+    - [The issue with sort()](#the-issue-with-sort)
+    - [Sorting Algorithms](#sorting-algorithms)
+    - [Bubble Sort](#bubble-sort)
+    - [Selection Sort](#selection-sort)
+    - [Insertion Sort](#insertion-sort)
+    - [Merge Sort and O(n log n)](#merge-sort-and-on-log-n)
+    - [Quick Sort](#quick-sort)
+    - [Which Sort is Best](#which-sort-is-best)
+    - [Heap Sort](#heap-sort)
+    - [Radix Sort and Counting Sort](#radix-sort-and-counting-sort)
+    - [Sorting Review](#sorting-review)
 ---
 
 ---
@@ -881,7 +893,7 @@ spanish.sort(function(a,b) {
     - Time complexity: O(n^2)
     - Space complexity: O(1)
 
-### Merge Sort and O(n log n)
+#### Merge Sort and O(n log n)
 - Merge sort (like quick sort) uses the divide and conquer approach with the use of recursion
     - This method usually provides a logn advantage
 - Merge sort takes a list and divides it in half continuosly until there are single elements
@@ -930,3 +942,42 @@ spanish.sort(function(a,b) {
     - I've tested the algorithms myself and I've seen that Quicksort has something special indeed.
         - It runs fast, much faster than Heap and Merge algorithms.
         - The secret of Quicksort is: It almost doesn't do unnecessary element swaps. Swap is time consuming.
+
+#### Radix Sort and Counting Sort
+- **Comparison Sort**
+    - Bubble Sort
+    - Insertion Sort
+    - Selection Sort
+    - Merge Sort
+    - Quick Sort
+- Mathematically, it is impossible to improve on O(n log(n))
+    - We sort by comparison
+    - However, it can be improved upon if there are no comparisons made
+
+- **Non-comparison Sort**
+    - Counting sort
+    - Radix sort
+- Non-comparison uses binary for sorting?
+- They are only useful for fixed length integers
+
+- **Radix sort**:
+    - Time complexity: O(nk)
+    - Space complexity: O(n+k)
+
+- **Counting sort**:
+    - Time complexity: O(n+k)
+    - Space complexity: O(k)
+
+- Radix Sort: https://brilliant.org/wiki/radix-sort/
+- Radix Sort Animation: https://www.cs.usfca.edu/~galles/visualization/RadixSort.html
+- Counting Sort: https://brilliant.org/wiki/counting-sort/
+- Counting Sort Animation: https://www.cs.usfca.edu/~galles/visualization/CountingSort.html
+
+#### Sorting Review
+- JavaScript uses insertion sort for the ``sort()`` method, however it is different from browser to browser
+    - Chrome uses quick sort and insertion sort
+    - Mozilla uses merge sort
+- Use **quick sort** when the average case performance matters more than the worst case (average is O(n log(n)))
+- **merge sort** is always O(n log(n)) and it' stable... space complexity is worse than quick sort
+- In the work setting **bubble**, **insertion**, and **selection** are not typically used
+- In the work setting, the framework or library will have a built in sorting algorithm
