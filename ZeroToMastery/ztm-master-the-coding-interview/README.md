@@ -981,3 +981,36 @@ spanish.sort(function(a,b) {
 - **merge sort** is always O(n log(n)) and it' stable... space complexity is worse than quick sort
 - In the work setting **bubble**, **insertion**, and **selection** are not typically used
 - In the work setting, the framework or library will have a built in sorting algorithm
+
+---
+### Alogrithms: Searching + BFS + DFS
+- Breadth First Search
+- Depth First Search
+- Searching is performed often
+
+- **Search/Traversal**
+    - Linear Search
+    - Binary Search
+    - Depth First Search
+    - Breadth First Search
+
+#### Linear Search
+- A method of finding a target value within a list
+- Sequentially searches each element in a list until the target is found or each element has been searched
+- **Linear Search**:
+    - Time complexity: O(n)
+- Search can be improved if the elements are sorted
+
+#### Binary Search
+- If we know the list is sorted, we can discard half the items... we can start searching in the middle of the list
+- **Binary Search**:
+    - Time complexity: O(log n)
+
+#### Graph + Tree Traversals
+- Search and Traversal are often used interchangably
+- Traversals can be thought of as visiting every node
+- Both tree and graph traversals will be DFS or BFS
+
+#### BFS Introduction
+- Breadth First Search searches left to rigtht level by level until the node is found or tree ends
+- BFS uses additional memory because it is necessary to track the child nodes on each level
