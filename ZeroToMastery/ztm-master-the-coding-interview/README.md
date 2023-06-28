@@ -96,6 +96,17 @@
     - [Heap Sort](#heap-sort)
     - [Radix Sort and Counting Sort](#radix-sort-and-counting-sort)
     - [Sorting Review](#sorting-review)
+- [Alogrithms: Searching + BFS + DFS](#alogrithms-searching--bfs--dfs)
+    - [Linear Search](#linear-search)
+    - [Binary Search](#binary-search)
+    - [Graph + Tree Traversals](#graph--tree-traversals)
+    - [BFS Introduction](#bfs-introduction)
+    - [DFS Introduction](#dfs-introduction)
+    - [BFS vs DFS](#bfs-vs-dfs)
+    - [PreOrder, InOrder, PostOrder](#preorder-inorder-postorder)
+    - [Graph Traversal](#graph-traversal)
+    - [Dijkstra and Bellman-Ford Algorithms](#dijkstra-and-bellman-ford-algorithms)
+    - [Searching and Traversal Review](#searching-and-traversal-review)
 ---
 
 ---
@@ -1014,3 +1025,58 @@ spanish.sort(function(a,b) {
 #### BFS Introduction
 - Breadth First Search searches left to rigtht level by level until the node is found or tree ends
 - BFS uses additional memory because it is necessary to track the child nodes on each level
+
+#### DFS Introduction
+- Depth First Search searches one branch of the tree down as many levels as possible until target node is found or the end is reached
+- DFS has a lower memeory requirement than BFS because it's not necessary to store all the child pointers
+- The idea is we want to go as deep as possible in a graph or tree, usually starting from the left, and then go to the right until the traversal is complete
+
+#### BFS vs DFS
+- Both achieve the goal of traversal
+- Both have the same time complexity: O(n)
+- **BFS**
+    - Pros:
+        - Good at finding the shortest path
+    - Cons:
+        - Requires more memory
+    - If you have additional information and know that the location of the node is in the upper level of the graph or tree, BFS is better
+- **DFS**
+    - Pros:
+        - Less memory required
+        - Good at asking the question: does the path exist?
+    - Cons:
+        - It can get really slow if the tree or graph is really deep
+
+#### PreOrder, InOrder, PostOrder
+- There are three ways we can implement DFS:
+    - inorder: 33, 101, 105
+    - preorder: 101, 33, 105
+        - start with parent node then the child nodes from left to right
+        - useful if we cant to recreate a tree
+    - postorder: 33, 105, 101
+        - goes to the bottom from left to right up to the parent
+
+#### Graph Traversal
+- Graph traversals are the same as tree traversals considering trees are a type of graph
+- [Visual Algo](https://visualgo.net/en/dfsbfs)
+- **BFS in Graphs**
+    - Lends itself nicely to determining the shortest path between any node
+    - Used in reccomendation engines (p2p networks, google maps, facebook)
+    - Allows us to turn a graph into a tree
+- **DFS in Graphs**
+    - Can be used to solve something like a maze
+    - Good at determining if the path exists
+
+#### Dijkstra and Bellman-Ford Algorithms
+- These algorithms most likely won't show up in an interview as they are extremely complicated and take up a long time
+- BFS is good at findihng the shortes path, but it assumes each path has the same weight
+- Dijkstra or Bellman would be best to find the shortest path in a weighted graph
+- Bellman-Ford is more effective at solving the shortest path because it can account for negative weights
+- Bellman-Ford has a time complexity of O(n^2)
+- Dijkstra can't accomodate for negative weights, but it is more efficient
+
+#### Searching and Traversal Review
+- Linear search can be good for some cases but it's not the most efficient
+- Binary search can search with O(log(n))
+- Depth First Search goes as deep as possible into a tree or graph
+- Breadth First Search searches level by level
