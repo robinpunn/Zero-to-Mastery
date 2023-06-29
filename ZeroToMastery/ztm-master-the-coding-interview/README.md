@@ -1080,3 +1080,23 @@ spanish.sort(function(a,b) {
 - Binary search can search with O(log(n))
 - Depth First Search goes as deep as possible into a tree or graph
 - Breadth First Search searches level by level
+
+### Algorithms: Dynamic Programming
+#### Dynamic Programming Introduction
+- Dynamic programming is an optimization technique using caching
+- At a high level, dynamic programming is a way to solve a problem by breaking it down into a collection of sub problems
+    - Solve each sub problem once and store the solution
+
+#### Memoization
+- Caching is a way to store values so you can use them later on
+- Caching is a way to speed up programs by holding some peice of data in an easily accessible way
+- Memoization is a specific form of caching that involves caching the return value
+- Memoization is simply a way to remember a solution to a sub-problem
+
+#### Dynamic Programming
+- Dynamic programming combines divide and conquer with memoization
+- Steps to determine whether dynamic programming should be used
+    1. Can be divided into subproblem
+    2. Recursive solution
+    3. Are the subproblems repetitive
+    4. Memoize subproblems
