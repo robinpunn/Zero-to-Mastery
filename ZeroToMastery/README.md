@@ -18,3 +18,5 @@
 #### Complete Junior to Senior Web Developer Roadmap
 
 #### Master the Coding Interview: Data Structures + Algorithms
+
+#### Web Security & Bug Bounty: Learn Penetration Testing

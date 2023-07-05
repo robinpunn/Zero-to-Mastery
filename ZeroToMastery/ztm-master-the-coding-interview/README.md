@@ -96,7 +96,7 @@
     - [Heap Sort](#heap-sort)
     - [Radix Sort and Counting Sort](#radix-sort-and-counting-sort)
     - [Sorting Review](#sorting-review)
-- [Alogrithms: Searching + BFS + DFS](#alogrithms-searching--bfs--dfs)
+1. [Alogrithms: Searching + BFS + DFS](#alogrithms-searching--bfs--dfs)
     - [Linear Search](#linear-search)
     - [Binary Search](#binary-search)
     - [Graph + Tree Traversals](#graph--tree-traversals)
@@ -107,6 +107,10 @@
     - [Graph Traversal](#graph-traversal)
     - [Dijkstra and Bellman-Ford Algorithms](#dijkstra-and-bellman-ford-algorithms)
     - [Searching and Traversal Review](#searching-and-traversal-review)
+1. [Algorithms: Dynamic Programming](#dynamic-programming)
+    - [Dynamic Programming Introduction](#dynamic-programming-introduction)
+    - [Memoization](#memoization)
+    - [Dynamic Programming](#dynamic-programming)
 ---
 
 ---
@@ -1080,6 +1084,8 @@ spanish.sort(function(a,b) {
 - Binary search can search with O(log(n))
 - Depth First Search goes as deep as possible into a tree or graph
 - Breadth First Search searches level by level
+
+---
 
 ### Algorithms: Dynamic Programming
 #### Dynamic Programming Introduction
