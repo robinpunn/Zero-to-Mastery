@@ -23,6 +23,13 @@
     - [What is HTTP?](#what-is-http)
     - [What is a Client?](#what-is-a-client)
     - [What is a Web Server?](#what-is-a-web-server)
+1. [Website Enumaration and Information Gathering](#website-enumaration-and-information-gathering)
+    - [Theory](#theory)
+    - [Ping, Host, Nslookup](#ping-host-nslookup)
+    - [Whatweb](#whatweb)
+    - [Dirb](#dirb)
+    - [Nmap](#nmap)
+    - [Nikto](#nikto)
 ---
 
 ### Introduction to Bug Bounty
@@ -203,3 +210,59 @@
     - The content can be static (for example, text and images) or dynamic (for example, a computed price or the list of items a customer has marked for purchase).
 - To deliver dynamic content, most web servers support server‑side scripting languages to encode business logic into the communication.
     - Commonly supported languages include Active Server Pages (ASP), Javascript, PHP, Python, and Ruby.
+
+### Website Enumaration and Information Gathering
+
+#### Theory
+- We want to learn as much about the target before performing any type of attack
+    - Any information can be useful ( what is its structure? does it have forms? etc.)
+- It is as simple as opening a website and interacting with it
+    - We can use ``nslookup`` to get ip addresses
+    - Bigger websites such as facebook have ranges of ip addresses
+- Website structure: what is it made of? does it use javascript? does it have thid party applications?
+- Where is the website hosted?
+    - What OS does the system that hosts the website run?
+    - Does server have other ports open?
+- Does the website use a database?
+- Does the website have encryption?
+- **Google dorking**: using advanced google search features to find information
+    - ``site:tesla.com filetype:pdf`` find all the pdfs from tesla.com
+    - ``"@tesla.com" -site: tesla`` find emails
+    -``intitle:admin OR inurl:admin site:site.com``
+- https://www.exploit-db.com/google-hacking-database
+
+#### Ping, Host, Nslookup
+- ``ping`` allows us to determine whether or not a host is online
+    - can use ip address or url
+    - some websites block ping probes, and using the url may not return an accurate ip address
+- ``host`` can also determine the ip address of a website
+-``nslookup`` is another option to find an ip address
+-``whois`` can be used to gather details about a website
+
+#### Whatweb
+- ``whatweb`` is a tool that determines which technologies a website has
+- we can google the technologies to see if they have any known vulnerabilites
+- ``whatweb --help`` gives use all the possible options with the tool
+-``man whatweb`` opens the manual
+- we can only use the aggressive mode for website we have permission to scan
+``whatweb --aggression -v 192.168.x.xx``
+- ``whatweb`` can also be used on multiple ip addresses, we do this by typing a range
+    - ``whatweb --aggression 3 -v 192.168.1.1/24 --no-errors``
+
+#### Dirb
+-``dirb`` is another tool used for website enumeration
+    - it is used to discover hidden directories on a website
+- ``dirb http://192.168.x.x``
+- ``dirb http://192.168.x.x /usr/share/wordlists/dirb/common.txt`` pressing tab before typing ``common.txt`` will show different lists to chose from
+
+#### Nmap
+- Network mapper
+    - A tool used to map a network/discover open ports on target
+    - Discover services running on open ports
+- ``nmap 192.168.x.xx`` for a general scan
+- ``nmap -sV 192.168.x.xx`` to scan for versions of services running on open ports
+- ``nmap --script vuln 192.168.x.xx`` use script for discovering vulnerabilities
+    - We can also run individual scripts
+
+#### Nikto
+- A tool that performs comprehensive tests against web servers searching for server misconfigurations, outdated version of servers, and scans for dangerous files
