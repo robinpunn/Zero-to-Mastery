@@ -11,6 +11,14 @@
     2. [Arrays Data Structure](#arrays-data-structure)
         - [Array](#array)
         - [Arrays Q and A](#arrays-q-and-a)
+3. [Search](#search)
+	1. [Linear Search and Katat Setup](#linear-search-and-kata-setup)
+		- [Algorithms](#algorithms)
+	2. [Binary Search Algorithm](#binary-search-algorithm)
+		- [Is it ordered](#is-it-ordered)
+	3. [Psuedo Code Binary Search](#psuedo-code-binary-search)
+	4. [Two Crystal Balls Problem](#two-crystal-balls-problem)
+	5. [Implementing Two Crystal Balls](#implementing-two-crystal-balls)
 
 
 ## Introduction
@@ -218,3 +226,164 @@ Q: How big is the array that you instantiate?
 A: That is part of optimizing. In Rust, if you create a new vector, it's going to create a memory buffer with a size 5 underneath. As you push and pop, it has 5 units for you to be able to play in.
 
 
+## Search
+### Linear Search and Kata Setup
+#### Algorithms
+The A in DSA
+
+**When Applicable**
+I will pretend that JavaScript actually has arrays
+I only have access to the .length property of an array
+
+It is a good practice to visualize the problem, discuss it with boxes and arrows, and then program it. It's definitely a core competency that you will follow for life.
+
+Search is something that you do often.
+Possibly the simplest algo, Linear Search.
+The ``indexOf`` method is a linear search
+**What is the Big O**
+O(n)... as the input grows, so does the time (linearly)
+
+**Let's Implement it**
+``git clone git@github.com:ThePrimeagen/kata-machine.git``
+
+First example is linear search
+```js
+export default function linear_search( haystack: number[], needle: number,): boolean {
+    for (let i = 0; i < haystack.length; i++) {
+        if (haystack[i] === needle) {
+            return true;
+        }
+    }
+    return false;
+}
+```
+
+### Binary Search Algorithm
+#### **Is it ordered**
+If your data set is ordered, you have new advantages you can take with that data
+If we have an array that's ordered, we don't have to start in the first position
+
+**10%**
+One approach to take would be not to search from the first but to search maybe 10% of n, and then check to see if what you've searched it larger than what you need.
+If it is larger, then you can search that portion to get the solution.
+
+So we do 10 operations of jumping, plus 0.1 N. The worst case is still O(n)
+
+Practically speaking, this is better than linear search.  But theoretically, if our elements go from 100 to 1,000,000 our algorithm will run that much slower. So we didn't "improve" the algorithm, we improved it practically speaking.
+
+**Middle**
+Another approach is to jump the middle of the array. If our value isn't in the middle, then we can check only 1 half of the array. We can keep cutting the search in half until we ultimately reach:
+(N/2<sup>k</sup>) = 1
+N=2<sup>k</sup>
+log<sub>2</sub>N = k
+logN
+
+**Example**
+log4096 = 12
+4096
+2048
+1024
+512
+256
+128
+64
+32
+16
+8
+4
+2
+1
+We take 12 steps to get to 1
+
+So the worst case is we keep have to half the data, logN, and this is a binary search
+
+##### **Another BigO Trick**
+If the input halves at each step, its likely O(logN) or O(NlogN)
+
+### Psuedo Code Binary Search
+a function that searches an array with a low and high
+``search(arr, lo,hi)n``
+We could do a loop until some condition occurs
+First we find the midpoint: lo + hi - lo divided by 2
+**m = lo + (hi-lo) /2**
+Adding low is the "offset", hi-lo /2 is midpoint
+
+Then we assign the value to the midpoint
+
+Condition 1 : value === n... then return true
+Condition 2 : value > n... lo = m + 1, m = lo + (hi - lo) /2
+Condition 3 : else... hi = m
+
+do all that, while lo is less than high
+
+This works only under the assumption that the array is sorted
+
+```js
+export default function bs_list(haystack: number[], needle: number): boolean {
+    let lo = 0;
+    let hi = haystack.length;
+
+    do {
+        const m = Math.floor(lo + (hi - lo) / 2);
+        const v = haystack[m];
+
+        if (v === needle) {
+            return true;
+        } else if (v > needle) {
+            hi = m;
+        } else {
+            lo = m + 1;
+        }
+
+    } while (lo < hi);
+
+    return false;
+}
+```
+
+### Two Crystal Balls Problem
+Given two crystal balls that will break from high enough distance, determine the exact spot in which it will break in the most optimized way
+
+We're going to have an array filled with false and true, our goal is to find the first true
+We can use a linear search to find the optimal breaking point returning true which would be O(n)
+If we used binary search at half the data set, it would still be O(n) considering we have two crystal balls and if the first returns true then a ball breaks???
+Using binary search, we cut the space in half, but it would be more efficient to jump a square root amount of times???
+Using square roots, we make jumps until it breaks and then move back to the last point of non breaking. This would be O($\sqrt{n}$)
+
+### Implementing Two Crystal Balls
+The logic is, that when using binary search, if the ball breaks if we start at the half way point, then we only have one ball left and we would have to start at the last none "good" position which would be the start. Then we would linearly search from there. Even though its half the data set, it's still O(n) after dropping constants.
+
+
+```js
+export default function two_crystal_balls(breaks: boolean[]): number {
+    // create the jump using square root
+    const jumpAmount = Math.floor(Math.sqrt(breaks.length));
+
+    // use first crystal ball to see where it breaks
+    let i = jumpAmount;
+
+    for (; i < breaks.length; i += jumpAmount) {
+        if (breaks[i]) {
+            break;
+        }
+    }
+
+    // if it breaks, walk back sqrt(n)
+    i -= jumpAmount;
+
+    // as long as j is less than the jump amount and i is less than breaks.length, loop until it breaks
+    for (let j = 0; j < jumpAmount && i < breaks.length; ++j, ++i) {
+        if (breaks[i]) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+```
+We first walk by $\sqrt{n}$
+We check for breaks jumping by $\sqrt{n}$
+If it breaks, we jump back $\sqrt{n}$
+Then we linearly walk forward at most a $\sqrt{n}$ until we find a break
+
+The reason we choose $\sqrt{n}$ is the only way we can change this from non linear running... if we use binary search, we still run into a linear problem
