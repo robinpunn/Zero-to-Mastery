@@ -19,7 +19,21 @@
 	3. [Psuedo Code Binary Search](#psuedo-code-binary-search)
 	4. [Two Crystal Balls Problem](#two-crystal-balls-problem)
 	5. [Implementing Two Crystal Balls](#implementing-two-crystal-balls)
-
+4. [Sort](#sort)
+	1. [Bubble Sort](#bubble-sort)
+	2. [Implementing BUbble Sort](#implementing-bubble-sort)
+	3. [Linked List Data Structures](#linked-list-data-structures)
+		- [What Sucks about an array](#what-sucks-about-an-array)
+		- [Let's talk about linked lists](#lets-talk-about-linked-lists)
+		- [Insertion](#insertion)
+		- [Deletion](#deletion)
+		- [Linked List complexity](#linked-list-complexity)
+	4. [Queue](#queue)
+		- [Implementing a queue](#implementing-a-queue)
+		- [Queue Q and A](#queue-q-and-a)
+	5. [Stack](#stack)
+		- [Implementing a stack](#implementing-a-stack)
+---
 
 ## Introduction
 [A Common-Sense Guide to Data Structures and Algorithms](https://www.amazon.com/Common-Sense-Guide-Structures-Algorithms-Second/dp/1680507222?keywords=introduction+to+algorithms&s=books&sr=1-16&linkId=2000de29907b98b5ac7a98aa6b52c1d9&language=en_US&ref_=as_li_ss_tl)
@@ -387,3 +401,392 @@ If it breaks, we jump back $\sqrt{n}$
 Then we linearly walk forward at most a $\sqrt{n}$ until we find a break
 
 The reason we choose $\sqrt{n}$ is the only way we can change this from non linear running... if we use binary search, we still run into a linear problem
+
+
+
+## Sort
+### Bubble Sort
+Insertion sort is usually the first sort algorithm that is taught, but bubble sort is easy to visualize. It also has only 3 lines and is simple to write.
+
+**Math definition**: x<sub>i</sub> $\leq$ x<sub>i + 1</sub>
+any x<sub>i</sub> is less than or equal to x<sub>i + 1</sub>, true for the entire array
+This property doesn't hold true universally for an unsorted array
+
+**How Bubble Sort Works**
+It starts in the 0<sup>th</sup> poistion and it goes to the end of the array (O(n)???)
+It checks if the next element is larger and swaps positions if so
+In a singular iteration, an array has the largest item sorted at the the end
+So the next bubble sort will go up to, but not include the last position
+This will keep running until there's on position left, which means all elements are sorted
+
+First run : [1,3,7,4,2] -> [1,3,4,2,7] n
+Second run : [1,3,7,4,2] -> [1,3,2,4,7] n-1
+Third run : [1,3,7,4,2] -> [1,2,3,4,7] n -2
+Last run: ... n-n+1
+
+(n+1) x n/2 will tell you the sum of numbers between a range
+n(n+1) / 2
+drop constants: n<sup>2</sup> + n
+drop non significant values: n<sup>2</sup>
+
+Bubble sort = O(n<sup>2</sup>)
+
+### Implementing Bubble Sort
+We have an array from 0 to n
+we start  at 0 and go up to n, but not including n or n-1... because we take i and compare it to i+1... we don't want to go off the array
+for i.. n
+for j.. n-1-i
+if (arr[i] > arr[j]) then swap i and j
+
+**There are other sorting strategies**
+But they involve recursion which is a topic for later
+
+### Linked List Data Structures
+Earlier, we declared that in JavaScript ``const a = []`` is not actually an array. It has methods like push, which an actual array wouldn't have. There may be an array underneath the hood, but somehow, we have the ability to add.
+
+It is hard to call an array a data structure because it is so fundamental
+
+##### What sucks about an array?
+- Deletion: you can't really delete, you can 0 out something.
+- Insertion: you can't really insert, you can write
+- It's ungrowable
+
+##### Let's talk about linked lists
+Often called a node based data structure... a node is the type of container that will wrap our data
+In a linked list, if you have a series of values, you're going to see data organized in a way that visiting a data point will point to the next data point (node)
+A linked list does not have an index. You have access to a node which you can use to traverse to the node that you desire
+get(i) would involve traversing the entire linked list
+
+A singly linked list, one points to the next... you can't walk backwards
+A -> B -> C -> D
+```js
+node<T>
+	val: T
+	next: ? Node<T>
+```
+
+A doubly linked list comes with an extra property, previous... we can walk back and forth form nodes
+A <-> B <-> C <-> D
+```js
+node<t>
+	val: T
+	next: ? Node<T>
+	prev: Node<T>
+```
+
+In linked lists, deletion and insertion can be very fast
+
+##### Insertion
+In terms of inserting, if we wanted to insert F in between A and B, we would only have to change next and previous properties... we don't need to know about the rest of the linked list
+
+```
+Linked List: A -> B -> C -> D
+Insert: F after A
+A next -> F
+F next -> B
+B prev -> F
+F prev -> A
+```
+All of these operations are performed at constant time
+Insertion is O(1)
+We have to remember, practically speaking constants can matter, but theoretically we drop constants... Yes insertion is O(1), but that is after dropping constants
+
+##### Deletion
+
+```
+Linked List: A -> B -> C -> D
+Delete C
+
+Goal:
+B next -> D
+D prev -> B
+
+Order of operations:
+C prev = B
+B next = C next
+D prev = C prev
+C prev = C next = null (deleting C)
+```
+
+The key here is that we have manage the links of ``next`` and ``prev``
+Order of operations is important. If we remove a link, we may not be able to access that node anymore. For example, if we don't have access to ``C.next``, then we don't have access to ``D``
+Like insertion, Deletion is O(1)
+
+##### Linked List Complexity
+If we were to get a value, we'd have to "walk" the list
+Get head/tail can be constant
+Deletion from ends (head/tail) is constant
+Deletion from the middle requires traversal... two operation cost: traversal + deletion
+Prepend/Append are constant time (adding to front and end)
+Insertion in the middle requires traversal
+
+```js
+interface LinkedList<T> {
+	get length(): number;
+	insertAt(item: T, index: number): void;
+	remove(item: T): T | undefined;
+	removeAt(index: number): T | undefined;
+	append(item: T): void;
+	prepend(item: T): void;
+	get(index: number): T | undefined;
+}
+```
+
+Linked lists are foundational. Every linked list is a graph. Every linked list is a tree.
+
+### Queue
+Data structure built on top of a linked list. A queue is a specific implementation of a linked list. It is intentionally constrained to be used in a certain way.
+
+**FIFO**
+Queues are first in first out
+A -> B -> C -> D
+A is the head and D is the tail. When inserting in a queue, it goes to the end. So the tail D, will point to the inserted data
+
+**Insertion**
+``this.tail.next = data``
+``this.tail = data``
+
+**Pop**
+Queues are singly linked lists
+If we want to pop head:
+h = head
+head = head.next
+h.next = null
+return h.value
+
+A queue constrains what you can do. So you're getting O(1) performance for insertion
+The actions associated with queues are generally:
+- enqueue (add to start)
+- dequeue (remove head)
+- peek (view head)
+
+#### Implementing a Queue
+```js
+type Node<T> = {
+    value: T;
+    next?: Node<T>;
+};
+
+export default class Queue<T> {
+    public length: number;
+    private head?: Node<T>;
+    private tail?: Node<T>;
+
+    constructor() {
+        this.head = this.tail = undefined;
+        this.length = 0;
+    }
+
+    enqueue(item: T): void {
+        const node = { value: item } as Node<T>;
+
+        this.length++;
+
+        if (!this.tail) {
+            this.tail = this.head = node;
+            return;
+        }
+
+        this.tail.next = node;
+        this.tail = node;
+    }
+
+    deque(): T | undefined {
+        if (!this.head) {
+            return undefined;
+        }
+
+        this.length--;
+
+        const head = this.head;
+
+        this.head = this.head.next;
+
+        // this step isn't necessary in js, but required in other languages
+        head.next = undefined;
+
+        if (this.length === 0) {
+            this.tail = undefined;
+        }
+
+        return head.value;
+    }
+
+    peek(): T | undefined {
+        return this.head?.value;
+    }
+
+}
+```
+
+#### Queue Q and A
+``if (!this.tail)`` is the same check as ``if(this.length === 0)``. TypeScript compiler doesn't like ``this.length`` (object is possibly undefined) so we use ``!this.tail``
+
+``peek`` allows us to see the next value returned without mutating the state of the queue... it just gets the value from the head
+
+Why do we set ``this.tail.next`` to the new ``node``?
+If we want to insert an element, we have to do two operations:
+We first have to go to the tail and set its next to point to F. After that, our tail will still be pointing at E. So the second operation is to set the ``tail`` to the new ``node``.
+The tail should always represent the end of the queue.
+
+The opposite of queue is a stack.
+
+### Stack
+A stack is singly linked list in which you only add and remove from the head
+A stack is a backwards queue
+If were to add to a stack, the new ``node`` would point to ``head``. Then the new ``node`` would become the ``head``
+The ``reverse`` operation of a stack is removing it. You would save head, then update head to point to next and return out the node.
+Like queues, stacks are constrained by design only allowing pushing and popping from one side.
+
+#### Implementing A Stack
+##### My Solution
+```js
+type Node<T> = {
+    value: T;
+    prev?: Node<T>;
+};
+
+export default class Stack<T> {
+    public length: number;
+    private head?: Node<T>;
+
+    constructor() {
+        this.head = undefined;
+        this.length = 0;
+    }
+
+    push(item: T): void {
+        const node = { value: item } as Node<T>;
+        this.length++;
+
+        if (!this.head) {
+            this.head = node;
+            return;
+        }
+
+        node.prev = this.head;
+        this.head = node;
+    }
+
+    pop(): T | undefined {
+        if (!this.head) {
+            return undefined;
+        }
+
+        this.length--;
+
+        const head = this.head;
+        this.head = this.head.prev;
+
+        return head.value;
+    }
+
+    peek(): T | undefined {
+        return this.head?.value;
+    }
+}
+```
+
+##### Prime Solution
+```js
+type Node<T> = {
+    value: T;
+    prev?: Node<T>;
+};
+
+export default class Stack<T> {
+    public length: number;
+    private head?: Node<T>;
+
+    constructor() {
+        this.head = undefined;
+        this.length = 0;
+    }
+
+    push(item: T): void {
+        const node = { value: item } as Node<T>;
+        this.length++;
+
+        if (!this.head) {
+            this.head = node;
+            return;
+        }
+
+        node.prev = this.head;
+        this.head = node;
+    }
+
+
+
+    pop(): T | undefined {
+        this.length = Math.max(0, this.length - 1);
+
+        if (!this.head) {
+            return undefined;
+        }
+
+        const head = this.head as Node<T>;
+        this.head = this.head?.prev;
+
+        return head.value;
+    }
+
+    peek(): T | undefined {
+        return this.head?.value;
+    }
+}
+```
+
+##### Solution with this.length
+```js
+type Node<T> = {
+    value: T;
+    prev?: Node<T>;
+};
+
+export default class Stack<T> {
+    public length: number;
+    private head?: Node<T>;
+
+    constructor() {
+        this.head = undefined;
+        this.length = 0;
+    }
+
+    push(item: T): void {
+        const node = { value: item } as Node<T>;
+
+        this.length++;
+
+        if (!this.head) {
+            this.head = node;
+            return;
+        }
+
+        node.prev = this.head;
+        this.head = node;
+    }
+
+    pop(): T | undefined {
+
+        this.length = Math.max(0, this.length - 1);
+
+        if (this.length === 0) {
+            const head = this.head;
+            this.head = undefined;
+            return head?.value;
+        }
+
+        const head = this.head as Node<T>;
+        this.head = this.head?.prev;
+        return head.value;
+    }
+
+    peek(): T | undefined {
+        return this.head?.value;
+    }
+
+}
+```
+
+[Math.max](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/max)returns the largest of the numbers given as the input parameters
