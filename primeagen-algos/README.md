@@ -33,6 +33,11 @@
 		- [Queue Q and A](#queue-q-and-a)
 	5. [Stack](#stack)
 		- [Implementing a stack](#implementing-a-stack)
+5. [Arrays](#arrays)
+	1. [Arrays vs Linked Lists](#arrays-vs-linked-lists)
+	2. [ArrayList](#arraylist)
+	3. [ArrayBuffer](#arraybuffer)
+	4. [Data Structures Q and A](#data-structures-q-and-a)
 ---
 
 ## Introduction
@@ -790,3 +795,78 @@ export default class Stack<T> {
 ```
 
 [Math.max](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/max)returns the largest of the numbers given as the input parameters
+
+
+## Arrays
+### Arrays vs Linked Lists
+
+Arrays give fast access with Indices
+There isn't a real "insert" in an array, have to shift and unshift data
+With arrays, you have to allocate memory upfront... as opposed to linked lists that start with nothing
+WIth a linked list, you always have to traverse the entire list when searching, you can't hop to any specific point
+You would want to use something like an array if need to scan or hop into a list through random access
+If you just want to push/pop into the head/tail, then linked lists are ideal
+
+### ArrayList
+Can we do better. Can we have an array access with the ability to grow
+An ArrayList uses an array as the fundamental data type instead of a node based structure
+Using push is constant time O(1)
+Using pop is constant time O(1)
+An ArrayList has a capacity that can be extended to allow growth
+Eg, the array start a capacity of 3, if you were to push beyond that, it would copy the original array to a new array with a larger capacity
+If we use enqueue with an array list, we have to expand the array if at capacity, and then also move each element over = O(n)
+ArrayLists are good with push and pop but bad with queue and dequeue
+Also, inserting an element in the middle would require everything beyond the index of the insertion to be shifter
+
+**Which one is better?**
+It depends on the situation.
+Pushing and popping would be good with both.
+Arrays gives use good random access.
+Removing from the front is poor in an array
+
+You don't necessarily have to know how to implement things, but you should know about the cost of implementing certain things. Understand the why.
+
+### ArrayBuffer
+An ArrayBuffer is similar to an ArrayList, but it doesn't use 0 as the head or length as the tail
+With an array buffer, we have an indexed based head and an indexed based tail that exists somewhere within the list. So there are null points in the area outside of the head and the tail
+To remove from the head, we +1 to the head and remove the old head O(1)
+To add to the tail, we +1 to the tail
+Pushing, popping, shifting, unshifting are all O(1)
+
+### Data Structures Q and A
+If we have these values:
+get O(1), push/pop O(1), unshift/shift O(n)
+We are probably working with an arraylist ( technically arrays can't grow)
+
+Slice is a linear operation that copies
+
+```js
+const a = new Uint8Array(10)
+
+a[0] = 5
+a[1] = 5
+a[2] = 69
+
+a // Uint8Array(10) [5,5,69,0,0,0,0,0,0,0]
+
+const b = a.slice(0,5)
+
+b[3] = 5
+
+a // Uint8Array(10) [5,5,69,0,0,0,0,0,0,0]
+
+const buf = Buffer.alloc(5)
+
+buf instanceof Uint8Array // true
+
+buf.writeUint(5,0)
+
+buf // <Buffer 05 00 00 00 00>
+
+const buf2 = buf.slice(0,5)
+buf2.writeUint8(5,3)
+
+buf // <Buffer 05 00 00 05 00?
+```
+``a`` hasn't changed when we change ``b``
+``buffers`` and ``nodes`` are "shallow" sliced
