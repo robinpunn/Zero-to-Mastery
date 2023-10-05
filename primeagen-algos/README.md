@@ -38,6 +38,12 @@
 	2. [ArrayList](#arraylist)
 	3. [ArrayBuffer](#arraybuffer)
 	4. [Data Structures Q and A](#data-structures-q-and-a)
+6. [Recursion](#recursion)
+	1. [What is Recursion](#what-is-recursion)
+	2. [Path Finding: Base Case](#path-finding-base-case)
+		- [Maze Solver](#maze-solver)
+		- [Implementing Maze Solver](#implementing-maze-solver)
+	3. [Recursion Q and A](#recursion-q-and-a)
 ---
 
 ## Introduction
@@ -870,3 +876,197 @@ buf // <Buffer 05 00 00 05 00?
 ```
 ``a`` hasn't changed when we change ``b``
 ``buffers`` and ``nodes`` are "shallow" sliced
+
+## Recursion
+### What is Recursion
+Something that keeps on calling itself over and over again
+
+The simplest way to think of recursion is a function that calls itself until the problem is solved. This usually involves what is called the base case. The base case is the point at which the problem is solved
+
+**The simplest example**
+```js
+function foo(n: number): number {
+	// Base case
+	if (n===1) {
+		return 1
+	}
+	// recurse
+	return n + foo(n - 1)
+}
+```
+All ways think clearly about the base case
+
+**Three values that can help us visualize**
+Return address - a function needs to know how it got here
+Return value - a space if made for the value returned
+Arguments - when you call a function, this is roughly some memory put into your system
+
+**The Process**
+If we call ``foo(5)``, the return address if whoever called ``foo(5)``. We don't know the value yet, its 5+. And we have an argument of 5.
+``foo`` checks if the argument is 1. Since it's 5, we now have ``foo(4)`` : (n-1), which is pointing to ``foo(5)``. The value is 4+ with an argument of 4. This will repeat until we have an argument of 1.
+Once we get to the end, we know what the return values will be.
+
+<table>
+<thead>
+<tr>
+<td>rA</td>
+<td>rV</td>
+<td>A</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>foo5</td>
+<td>5+10</td>
+<td>5</td>
+</tr>
+<tr>
+<td>foo4</td>
+<td>4+6</td>
+<td>4</td>
+</tr>
+<tr>
+<td>foo3</td>
+<td>3+3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>foo2</td>
+<td>2+1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>foo1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+If we had ``throw Error`` instead of ``return 1`` for our base case, then we would see a stack trace: the stack of functions that have been called
+
+So we go down the stack, the up the stack.
+
+There are two important steps: 1) base case 2) recurse
+
+When it comes to "pathing" there is an important third step to consider which breaks down recurse into three steps
+Recurse:
+	1. pre: n+
+	2. recurse: calling of the functoin
+	3. post: we can do a post operation after recursing
+
+### Path Finding: Base Case
+#### **Maze Solver**
+A list of strings that contain characters.
+"###" are walls that you cannot go through
+We can go in 4 directions
+But we might go to a spot that we've been to before
+
+So we need to create a strong base cast that we don't check for in our recursion
+
+**Base case**:
+1. its a wall... this would be an invalid state
+2. off the map... if you're on a spot not on the map, you have to return
+3. it's the end... our recursion should be complete
+4. if we have seen it... we don't want to visit the same place twice
+
+**Recursive case**
+Check every direction
+
+#### Implementing Maze Solver
+```js
+const dir = [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+];
+
+function walk(
+    maze: string[],
+    wall: string,
+    curr: Point,
+    end: Point,
+    seen: boolean[][],
+    path: Point[],
+): boolean {
+
+    // 1. Base case
+    // off the map
+    if (
+        curr.x < 0 ||
+        curr.x >= maze[0].length ||
+        curr.y < 0 ||
+        curr.y >= maze.length
+    ) {
+        return false;
+    }
+
+    // on a wall
+    if (maze[curr.x][curr.y] === wall) {
+        return false;
+    }
+
+    // the end
+    if (curr.x === end.y && curr.y === end.y) {
+        path.push(end);
+        return true;
+    }
+
+    // already been there
+    if (seen[curr.y][curr.x]) {
+        return false;
+    }
+
+    // 3 recurse
+    // pre
+    seen[curr.y][curr.x] = true;
+    path.push(curr);
+
+    // recurse
+    for (let i = 0; i < dir.length; ++i) {
+        const [x, y] = dir[i];
+        if (
+            walk(maze, wall, { x: curr.x + x, y: curr.y + y }, end, seen, path)
+        ) {
+            return true;
+        }
+    }
+
+    // post
+    path.pop();
+    return false;
+}
+
+export default function solve(
+    maze: string[],
+    wall: string,
+    start: Point,
+    end: Point,
+): Point[] {
+    const seen: boolean[][] = [];
+    const path: Point[] = [];
+
+    for (let i = 0; i < maze.length; ++i) {
+        seen.push(new Array(maze[0].length).fill(false));
+    }
+
+    walk(maze, wall, start, end, seen, path);
+
+    return path;
+}
+```
+
+Always think about your base case. Find a clear and defined reason why you should stop recursing
+Don't test during the recursive step, do it in the base case.
+Move everything you can into the base case.
+
+**When do I use recursion**
+It is not able to be done with a for loop
+
+### Recursion Q and A
+**We programmed in to stop when we reach an area we've seen?**
+`` path.pop();`` allows us to go back to an area we've seen?? Each coordinate is added to
+
+**What is the Big(O)**
+At most, we would check every square 4 times. So it would be linear, dropping the constant it should be O(n)
