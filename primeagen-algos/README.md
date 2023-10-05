@@ -44,6 +44,9 @@
 		- [Maze Solver](#maze-solver)
 		- [Implementing Maze Solver](#implementing-maze-solver)
 	3. [Recursion Q and A](#recursion-q-and-a)
+7. [Quick Sort](#quick-sort)
+	1. [Quick Sort Algorithm](#quick-sort-alogrithm)
+	2. [Implementing Quick Sort](#implementing-quick-sort)
 ---
 
 ## Introduction
@@ -1070,3 +1073,60 @@ It is not able to be done with a for loop
 
 **What is the Big(O)**
 At most, we would check every square 4 times. So it would be linear, dropping the constant it should be O(n)
+
+
+## Quick Sort
+### Quick Sort Algorithm
+To help understand divide and conquer, we are going to implement quicksort. It is an incredibly simple and impressive algorithm.
+
+There is an algorithm technique known as "divide and conquer". The idea is to split you data into chunks and go over those chunks to solve things faster
+
+There are other techniques/strategies. Linear search is "greedy"
+
+With quick sort, we chose a "pivot" from our data and walk the data set from the pivot point and arrange based on whether the data is smaller or larger than the pivot. At this point, this is a "weak sort". We keep on performing this operation until we get to a specific case
+
+Quicksort eventually sorts all the data without having to hold values in temporary structures.
+n/2<sup>k</sup> = 1 = log<sub>n</sub>
+BigO = O(n log<sub>n</sub>)
+However, this wouldn't be true if we don't have a true middle value.
+It can also be O(n<sup>2</sup>)
+### Implementing Quick Sort
+```js
+function qs(arr: number[], lo: number, hi: number): void {
+    if (lo >= hi) {
+        return;
+    }
+
+    const pivotIdx = partition(arr, lo, hi);
+
+    qs(arr, lo, pivotIdx - 1);
+
+    qs(arr, pivotIdx + 1, hi);
+}
+
+function partition(arr: number[], lo: number, hi: number): number {
+    const pivot = arr[hi];
+    let idx = lo - 1;
+
+    for (let i = lo; i < hi; ++i) {
+        if (arr[i] <= pivot) {
+            idx++;
+            const tmp = arr[i];
+            arr[i] = arr[idx];
+            arr[idx] = tmp;
+        }
+    }
+
+    idx++;
+
+    arr[hi] = arr[idx];
+
+    arr[idx] = pivot;
+
+    return idx;
+}
+
+export default function quick_sort(arr: number[]): void {
+    qs(arr, 0, arr.length - 1);
+}
+```
