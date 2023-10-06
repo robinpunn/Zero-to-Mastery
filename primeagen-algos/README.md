@@ -47,6 +47,11 @@
 7. [Quick Sort](#quick-sort)
 	1. [Quick Sort Algorithm](#quick-sort-alogrithm)
 	2. [Implementing Quick Sort](#implementing-quick-sort)
+8. [Doubly Linked List](#doubly-linked-list)
+	1. [Intro](#intro)
+	2. [Linked List: prepend, instertAt, and append](#linked-list-prepend-insertat-and-append)
+	3. [Linked List: remove, get, and removeAt](#linked-list-remove-get-and-removeat)
+	4. [Debugging Linked Lists](#debugging-linked-lists)
 ---
 
 ## Introduction
@@ -1130,3 +1135,142 @@ export default function quick_sort(arr: number[]): void {
     qs(arr, 0, arr.length - 1);
 }
 ```
+
+## Doubly Linked List
+### Intro
+```js
+interface LinkedList<T> {
+	get length(): number;
+	insertAt(item: T, index: number): void;
+	remove(item: T): T | undefined;
+	removeAt(index: number): T | undefined;
+	append(item: T): void;
+	prepend(item: T): void;
+	get(index: number): T | undefined;
+}
+```
+
+```js
+type Node<T> = {
+    value: T;
+    prev?: Node<T>;
+    next?: Node<T>;
+};
+
+export default class DoublyLinkedList<T> {
+    public length: number;
+    private head?: Node<T>;
+    private tail?: Node<T>;
+
+    constructor() {
+        this.length = 0;
+        this.head = undefined;
+        this.tail = undefined;
+    }
+...
+}
+```
+### Linked List: prepend, insertAt, and append
+```js
+    prepend(item: T): void {
+        const node = { value: item } as Node<T>;
+
+        this.length++;
+
+        if (!this.head) {
+            this.head = this.tail = node;
+            return;
+        }
+
+        node.next = this.head;
+        this.head.prev = node;
+        this.head = node;
+    }
+
+    insertAt(item: T, idx: number): void {
+        if (idx > this.length) {
+            throw new Error("can't do");
+        }
+
+        if (idx === this.length) {
+            this.append(item);
+            return;
+        } else if (idx === 0) {
+            this.prepend(item);
+	        return;
+        }
+
+        this.length++;
+        const curr = this.getAt(idx) as Node<T>;
+        const node = { value: item } as Node<T>;
+
+        node.next = curr;
+        node.prev = curr.prev;
+        curr.next = node;
+
+        if (node.prev) {
+            node.prev.next = node;
+        }
+    }
+
+    append(item: T): void {
+        this.length++;
+        const node = { value: item } as Node<T>;
+
+        if (!this.tail) {
+            this.head = this.tail = node;
+            return;
+        }
+
+        node.prev = this.tail;
+        this.tail.next = node;
+        this.tail = node;
+    }
+```
+
+### Linked List: remove, get, and removeAt
+```js
+    remove(item: T): T | undefined {
+        let curr = this.head;
+
+        for (let i = 0; curr && i < this.length; ++i) {
+            if (curr.value === item) {
+                break;
+            }
+            curr = curr.next;
+        }
+
+        if (!curr) {
+            return undefined;
+        }
+
+		return this.removeNode(curr);
+    }
+
+    get(idx: number): T | undefined {
+        return this.getAt(idx)?.value; //5:15
+    }
+
+    removeAt(idx: number): T | undefined {
+        const node = this.getAt(idx);
+
+        if (!node) {
+            return undefined;
+        }
+
+        return this.removeNode(node);
+    }
+```
+### Debugging Linked Lists
+```js
+private debug() {
+        let curr = this.head;
+        let out = "";
+
+        for (let i =0; curr && i< this.length; ++i) {
+	        out += `${i} => ${curr.value}`;
+            curr = curr.next;
+        }
+
+        console.log(out);
+    }
