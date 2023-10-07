@@ -52,6 +52,12 @@
 	2. [Linked List: prepend, instertAt, and append](#linked-list-prepend-insertat-and-append)
 	3. [Linked List: remove, get, and removeAt](#linked-list-remove-get-and-removeat)
 	4. [Debugging Linked Lists](#debugging-linked-lists)
+9. [Trees](#trees)
+	1. [Trees Overview](#trees-overview)
+		- [Terminology](#terminology)
+	2. [Tree Traversals](#tree-traversals)
+	3. [Implement Tree Traversal](#implement-tree-traversal)
+
 ---
 
 ## Introduction
@@ -1274,3 +1280,117 @@ private debug() {
 
         console.log(out);
     }
+```
+
+## Trees
+### Trees Overview
+**Where are trees?**
+Your filesystem is a tree
+The DOM is a tree
+Trees are massively important in compilers. You have probably minimally heard the term Abstract Syntax Tree.
+
+Trees are usually represented by nodes. ``node<T>``
+Instead of having a next or previous, there are children, an array of possible connections. Or there is a left/right
+
+#### Terminology
+root - the most parent node
+height - the longest path from the root to the most child node
+binary tree - a tree which has at most two children, at least 0 children
+general tree - a tree with 0 or more children
+binary search tree - a tree which has a specific ordering to the nodes and at most 2 children
+leaves - a node without children
+balanced - a tree is perfectly balanced when any node's left and right children have the same height
+branching factor - the amount of children  a tree has
+
+### Tree Traversals
+There are different ways in which you can visit the nodes of a tree
+A traversal is the most basic operation you can perform on a tree
+There are three types of tree traversals which depend on where you do the visiting of a node
+										7
+									23   3
+								5     4  18  21
+
+preOrder: first visit root, then recurse ---> 7,23,5,4,3,18,21
+inOrder: recurse left, visit root, recurse right ---> 5,23,4,7,18,3,21
+postOrder: recurse left, then right, then root  ---> 5,4,23,18,21,3,7
+preOrder, the root is first.
+inOrder root is in the middle.
+postOrder root is at the end
+
+This traversal is linear O(n)
+
+Trees are similar to linked lists. The difference being, the nodes don't point to each other, rather nodes have left/right children or children arrays
+
+### Implement Tree Traversal
+For these traversals, the base case would be when we are at a node that doesn't exist
+
+```js
+//BTSPreOrder
+function walk(curr: BinaryNode<number> | null, path: number[]): number[] {
+    if (!curr) {
+        return path;
+    }
+
+    // recurse
+    // pre
+    path.push(curr.value);
+
+    // recurse
+    walk(curr.left, path);
+    walk(curr.right, path);
+
+    return path;
+}
+
+export default function pre_order_search(head: BinaryNode<number>): number[] {
+    // const path: number[] = []
+    return walk(head, []);
+    // return path;
+}
+```
+
+```js
+//BTSInOrder
+function walk(curr: BinaryNode<number> | null, path: number[]): number[] {
+    if (!curr) {
+        return path;
+    }
+
+    walk(curr.left, path);
+    path.push(curr.value);
+    walk(curr.right, path);
+
+    return path;
+}
+
+export default function in_order_search(head: BinaryNode<number>): number[] {
+    return walk(head, []);
+}
+```
+
+```js
+//BTPostOrder.ts
+function walk(curr: BinaryNode<number> | null, path: number[]): number[] {
+    if (!curr) {
+        return path;
+    }
+
+    walk(curr.left, path);
+    walk(curr.right, path);
+    path.push(curr.value);
+
+    return path;
+}
+
+export default function post_order_search(head: BinaryNode<number>): number[] {
+    return walk(head, []);
+}
+```
+
+These types of traversals are known as depth first.
+
+When we perform recursion, we keep calling a function with it self. We keep passing in something new until we get to base case.
+So for inOrder, we go left until we can no longer go left. We go as deep as possible in the tree on the left hand side, and then visit a node. Then we go right and as left as possible until we can't, then visiting a node. So we're always going depth first.
+Explicitly, we are working with a tree. But implicitly, we are working with a stack. We keep searching and adding to the stack, then pop off the stack when we can't search anymore.
+
+Technically, we can do this traversal without recursion. We just have to add children to a stack.
