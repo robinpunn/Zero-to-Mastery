@@ -57,7 +57,16 @@
 		- [Terminology](#terminology)
 	2. [Tree Traversals](#tree-traversals)
 	3. [Implement Tree Traversal](#implement-tree-traversal)
-
+10. [Tree Search](#tree-search)
+	1. [Breadth-First Search](#breadth--first-search)
+	2. [Implement Breadth-First Search](#implement-breadth-first-search)
+	3. [Search Practice](#search-practice)
+	4. [Implement Binary Tree Comparison](#implement-binary-tree-comparison)
+	5. [Depth-First Find](#depth-first-find)
+	6. [Depth-First Insert](#depth-first-insert)
+	7. [Depth-First Delete](#depth-first-delete)
+	8. [Binary Search Q and A](#binary-search-q-and-a)
+	9. [Implement Depth-First Search](#implement-depth-first-search)
 ---
 
 ## Introduction
@@ -1394,3 +1403,152 @@ So for inOrder, we go left until we can no longer go left. We go as deep as poss
 Explicitly, we are working with a tree. But implicitly, we are working with a stack. We keep searching and adding to the stack, then pop off the stack when we can't search anymore.
 
 Technically, we can do this traversal without recursion. We just have to add children to a stack.
+
+## Tree Search
+### Breadth- First Search
+The opposite of a depth first search
+It visits "tree level" visiting one level of the tree at a time
+O(n)... but when using an arraylist O(n<sup>2</sup>)
+Make sure to use the right data structure when properly implementing a breadth first search
+Use a queue
+
+### Implement Breadth First Search
+We don't need to use recursion with a breadth-first search
+While ``q.notEmpty()`` ``next = q.deque()``
+``enqueue(next.L)````enqueue(next.R)``
+```js
+export default function bfs(head: BinaryNode<number>, needle: number): boolean {
+    const q = [head];
+
+    while (q.length) {
+        const curr = q.shift() as BinaryNode<number>;
+        // search
+        if (curr.value === needle) {
+            return true;
+        }
+
+        if (curr.left) {
+            q.push(curr.left);
+        }
+
+        if (curr.right) {
+            q.push(curr.right);
+        }
+    }
+    return false;
+}
+```
+
+### Search Practice
+Comparing two binary trees to see if they are equal in shape and structure
+Depth first search preserves shape whereas breadth first search does not
+
+		7
+	23   3
+
+		7
+	23
+    3
+
+If we were to use breadth first search, the above data structure would return true not accounting for the strucutre
+If we were to use depth first search, it would return false as the first structure would return null where the second would return 3
+
+### Implement Binary Tree Comparison
+A good idea to create your own function when using recursion.
+However, for this exercise doesn't need to create a new function for recursion
+```js
+export default function compare(
+    a: BinaryNode<number> | null,
+    b: BinaryNode<number> | null,
+): boolean {
+    // structural check
+    if (a === null && b === null) {
+        return true;
+    }
+
+    // structural check
+    if (a === null || b === null) {
+        return false;
+    }
+
+    // value check
+    if (a.value !== b.value) {
+        return false;
+    }
+
+    return compare(a.left, b.left) && compare(a.right, b.right);
+}
+```
+
+### Depth-First Find
+The binary search tree. They are not some new ds that we haven't seen. They are specifically an ordering to the data within the data structure
+
+A completely filled tree is where the left and right is completely filled with the same height
+
+BST only rule is the left side is less than or equal to and the right side is greater than
+It looks a lot like quicksort
+
+Similar to a binary search on an array list
+In a binary search on an array, we split it in half and look for the value from there. If we don't find the value, then we look at whether the value is larger or smaller.
+
+Find is easier to do on a binary search tree than it is on an ordered array.
+
+``find(node, value): bool``
+if !node, return false
+if node.value === value, return true
+if node.value < value, return find(node.right, value)
+return find(node.left, value)
+
+O(h) === O of height. The run time is dependent on the height of the tree
+
+### Depth-First Insert
+Insertion is very similar to find in that we have to find our way to a node
+First we check the value to see if it is larger than or smaller than or equal to
+
+``insert(node, value)``
+if node.value < value, ``insert(node.right, value)``
+else if node.value $\geq$ value, ``insert(node.left, value)
+In cases for null, we can add parent to the signature of the function, we can go back to the parent when hiding a null point and add in the value
+Or we could if a side is null, we can insert the value there
+
+Involve the null
+if node.value < value... if !node.right, then insert or traverse
+
+### Depth-First Delete
+Case 1: no child... we can simple delete
+Case 2: one child... set parent to child
+
+We can find the largest on the small(left side) and set that as the new connection after deletion
+OR we can find the smallest on the large(right side) and that that as the new node after deletion
+If we keep track of height, we will probably want to reorganize the side with larger height
+
+### Binary Search Q and A
+Q: After insertion, will it still be balanced?
+A: There is no guarantee after insertion that it will still be balanced.
+
+Q: Do we have to use larger than and less than values to create a tree.
+A: No. There are "weak ordered" trees that aren't arranged by value.
+
+### Implement Depth-First Search
+```js
+function search(curr: BinaryNode<number> | null, needle: number): boolean {
+    if (!curr) {
+        return false;
+    }
+
+    if (curr.value === needle) {
+        return true;
+    }
+
+    if (curr.value < needle) {
+        return search(curr.right, needle);
+    }
+
+    return search(curr.left, needle);
+}
+
+export default function dfs(head: BinaryNode<number>, needle: number): boolean {
+    return search(head, needle);
+}
+```
+
