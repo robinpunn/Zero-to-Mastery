@@ -67,6 +67,10 @@
 	7. [Depth-First Delete](#depth-first-delete)
 	8. [Binary Search Q and A](#binary-search-q-and-a)
 	9. [Implement Depth-First Search](#implement-depth-first-search)
+11. [Heap](#heap)
+	1. [Heap](#heap-1)
+	2. [Implementing Heap](#implementing-heap)
+	3. [Tries](#tries)
 ---
 
 ## Introduction
@@ -1552,3 +1556,158 @@ export default function dfs(head: BinaryNode<number>, needle: number): boolean {
 }
 ```
 
+## Heap
+### Heap
+The Heap data structure, often referred to as a priority queue, is a binary tree where every child and grand child is smaller (MaxHeap) or larger (MinHeap) than the current node
+Whenever a node is added, we must adjust the tree
+Whenever a node is deleted, we must adjust the tree
+There is no traversing the tree
+
+So with a MinHeap, the top value must be the smallest
+Heaps maintain a weak ordering, meaning that they are ordered, but it's not perfectly ordered
+The "heap condition" in a MinHeap would say that every node below it must be larger than or equal to it
+Getting the smallest item in a MinHeap would be O(1)
+
+A heap is usually a full or complete tree... it's always adding from left to right and it never has any empty spaces
+
+**Adding a node**
+When adding a new node, we go to the final spot in our tree and compare. We "bubble up" and swap until a condition is met. If we're in a MinHeap, then the new node should not be smaller than the nodes it's being compared to. If it is, then it bubbles up
+
+**Deleting a node**
+When deleting, we delete a the select node, then move the bottom node to that spot?? Then we "heap down" comparing values until everything is in the right spot
+
+We give each node an index.
+So there are no management of links. We can find children based on index.
+2i + 1 = left child
+2i + 2 = right child
+(i-1)/ 2 = parent (JS, we would need the floor operation... other languages won't include decimals)
+We can use these calculations to traverse the node
+To get the end node, we would use the length
+
+### Implementing Heap
+Length is used for insertion and deletion
+```js
+export default class MinHeap {
+    public length: number;
+    private data: number[];
+
+    constructor() {
+        this.data = [];
+        this.length = 0;
+    }
+
+    insert(value: number): void {
+        this.data[this.length] = value;
+        this.heapifyUp(this.length);
+        this.length++;
+    }
+
+    delete(): number {
+        if (this.length === 0) {
+            return -1;
+        }
+
+        const out = this.data[0];
+        this.length--;
+
+        if (this.length === 0) {
+            this.data = [];
+            return out;
+        }
+
+        this.data[0] = this.data[this.length];
+        this.heapifyDown(0);
+        return out;
+    }
+
+    private heapifyDown(idx: number): void {
+        const lIdx = this.leftChild(idx);
+        const rIdx = this.rightChild(idx);
+
+        if (idx >= this.length || lIdx >= this.length) {
+            return;
+        }
+
+        const lV = this.data[lIdx];
+        const rV = this.data[rIdx];
+        const v = this.data[idx];
+
+        if (lV > rV && v > rV) {
+            this.data[idx] = rV;
+            this.data[rIdx] = v;
+            this.heapifyDown(rIdx);
+        } else if (rV > lV && v > lV) {
+            this.data[idx] = lV;
+            this.data[lIdx] = v;
+            this.heapifyDown(lIdx);
+        }
+    }
+
+    private heapifyUp(idx: number): void {
+        if (idx === 0) {
+            return;
+        }
+
+        const p = this.parent(idx);
+        const parentV = this.data[p];
+        const value = this.data[idx];
+
+        if (parentV > value) {
+            this.data[idx] = parentV;
+            this.data[p] = value;
+            this.heapifyUp(p);
+        }
+    }
+
+    private parent(idx: number): number {
+        return Math.floor((idx - 1) / 2);
+    }
+
+    private leftChild(idx: number): number {
+        return 2 * idx + 1;
+    }
+
+    private rightChild(idx: number): number {
+        return 2 * idx + 2;
+    }
+}
+```
+Insert: O(log n)
+Delete: O(log n)
+
+Be careful about garbage. The previous values in the array remain unless you nil them out.
+
+### Tries
+If it's not a priority queue, its a trie.
+They are pronounced like tree(it's named after retrieval). So it's a Trie tree (but people keep calling them try trees/ prefix trees/ digital trees)
+
+The easiest way to visualize a trie is to think of auto-complete.
+
+In a trie, we have a root. The root doesn't have any value itself.
+In an English language tree, our tree can have 1 of 26 possible symbols as its children (unless we're adding symbols and case)
+
+If we wanted to add the word "cat"... we would add child "c", which would have a child "a", and "a" would have a child "t".
+
+To indicate a word, "t" would have an ``"*"`` child which denotes that the path we are on is a word. Or each child would have an ``"isWord"`` boolean flag.
+
+If we wanted to add ``"cats"`` we would add the ``"s"`` after the ``"t"``
+If we wanted to add ``"cattle"`` we would start branching from the ``"t"``
+
+If we wanted to autocomplete when someone type ``"c"``, we would have to do a depth-first search
+We can add a ``score`` or ``frequency`` to narrow down the search
+
+**Insertion**
+An iterative loop where we go to the current node
+``insertion(string)``
+	``curr = head``
+	``for c in string``
+		``if (curr[c])``
+			``curr = c``
+		``else``
+			``node = new Node()``
+			``curr[c] = node``
+			``current = node``
+	``curr.isWord = true``
+
+**Deletion**
+The opposite of ``insertion``. It's easier to use recursion for ``deletion`` because we want to get to the point of the node, and then delete our way back up
