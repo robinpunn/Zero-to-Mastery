@@ -71,6 +71,17 @@
 	1. [Heap](#heap-1)
 	2. [Implementing Heap](#implementing-heap)
 	3. [Tries](#tries)
+12. [Graphs](#graphs)
+	1. [Graphs Overview](#graphs-overview)
+		- [Terminology of Graphs](#terminology-of-graphs)
+	2. [Searching an Adjacency Matrix](#searching-an-adjacency-matrix)
+		- [How Are Graphs Represented](#how-are-graphs-represented)
+		- [Basic Searches](#basic-searches)
+	3. [Implement BFS on Adjacency Matrix](#implementing-bfs-on-adjacency-matrix)
+	4. [Implement DFS of Adjacency List](#implement-dfs-on-adjacency-list)
+	5. [Dijkstra's Shortest Path](#dijkstras-shortest-path)
+	6. [Implement Dijkstra's Shortest Path](#implement-dijkstras-shortest-path)
+	7. [Dijkstra's Shortest Path Runtime](#dijkstras-shortest-path-runtime)
 ---
 
 ## Introduction
@@ -1711,3 +1722,257 @@ An iterative loop where we go to the current node
 
 **Deletion**
 The opposite of ``insertion``. It's easier to use recursion for ``deletion`` because we want to get to the point of the node, and then delete our way back up
+
+## Graphs
+
+### Graphs Overview
+Everything we've done up until this point is effectively a graph
+A graph is a series of nodes with some amount of connections
+
+All trees are graphs. Not all graphs are trees.
+#### Terminology of Graphs
+This is not an exhaustive list of terms.
+
+**Graph Terms**
+cycle: When you starte a Node(x), follow the links, and end back at Node(x)
+acyclic: A graph that contains no cycles
+connected: When every node has a path to another node
+directed: When there is a direction to the connections (Twitter)
+undirected: !directed. (Facebook)
+weighted: The edges have a weight associated with them (Maps)
+dag: directed, acyclic graph
+
+**Implementation terms**
+node: a point or vortex on the graph
+edge: the connection between two nodes
+
+**Big O**
+BigO is commonly stated in terms of V and E where V stands for vertices and E stands for edges
+so O(V * E) means that we will check every vertex, and on every vertex check every edge
+
+### Searching an Adjacency Matrix
+#### How are graphs represented
+There are usually two ways to represent a graph (there is a third way of building a full graph node structure that has references of other graph nodes)
+- Adjacency List
+- Adjacency Matrix
+They both have their uses but in general we will mostly see adjacency lists. The reason is because it takes a lot of setup and memory for an adjacency matrix.
+
+An adjacency list would contain the indexes and connections of a node, a list of edges
+An adjacency matrix would have rows representing a node and an array that lists its connection with other nodes
+
+#### Basic Searches
+BFS and DFS still exist on a graph, and they are virtually no different than on a tree
+
+In DFS, we have a pre and post condition meaning we can push and pop. This allows us to build our path as we search.
+
+In BFS, we don't have recursion, we don't have something that maintains the shape or the structure of our search. We have to maintain it ourselves.  The best way is to use a ``previous`` array couples with a ``seen``/``visited`` array.
+
+### Implementing BFS on Adjacency Matrix
+```js
+export default function bfs(
+    graph: WeightedAdjacencyMatrix,
+    source: number,
+    needle: number,
+): number[] | null {
+
+    const seen = new Array(graph.length).fill(false);
+    const prev = new Array(graph.length).fill(-1);
+
+    seen[source] = true;
+    const q: number[] = [source];
+
+    do {
+        const curr = q.shift() as number;
+        if (curr === needle) {
+            break;
+        }
+
+        const adjs = graph[curr];
+
+        for (let i = 0; i < graph.length; ++i) {
+            if (adjs[i] === 0) {
+                continue;
+            }
+
+            if (seen[i]) {
+                continue;
+            }
+
+            seen[i] = true;
+            prev[i] = curr;
+            q.push(i);
+        }
+    } while (q.length);
+
+    if (prev[needle] === -1) {
+        return null;
+    }
+
+    // build it backwards
+    let curr = needle;
+    const out: number[] = [];
+
+    while (prev[curr] !== -1) {
+        out.push(curr);
+        curr = prev[curr];
+    }
+
+    if (out.length) {
+        return [source].concat(out.reverse());
+    }
+
+    return [];
+}
+```
+
+### Implement DFS on Adjacency List
+O(V+E)
+```js
+function walk(
+    graph: WeightedAdjacencyList,
+    curr: number,
+    needle: number,
+    seen: boolean[],
+    path: number[],
+): boolean {
+
+    if (seen[curr]) {
+        return false;
+    }
+
+    seen[curr] = true;
+
+    // recurse
+    // pre
+    path.push(curr);
+    if (curr === needle) {
+        return true;
+    }
+
+    // recurse
+    const list = graph[curr];
+    for (let i = 0; i < list.length; ++i) {
+        const edge = list[i];
+
+        if (walk(graph, edge.to, needle, seen, path)) {
+            return true;
+        }
+    }
+
+    // post
+    path.pop();
+
+    return false;
+}
+
+export default function dfs(
+    graph: WeightedAdjacencyList,
+    source: number,
+    needle: number,
+): number[] | null {
+    const seen: boolean[] = new Array(graph.length).fill(false);
+    const path: number[] = [];
+
+    walk(graph, source, needle, seen, path);
+
+    if (path.length === 0) {
+        return null;
+    }
+
+    return path;
+}
+```
+
+### Dijkstra's Shortest Path
+Calculating the shortest path from one node to all other nodes in the graph
+We can also find the shortest path to individual nodes
+
+A family of greedy algorithms
+
+We need a previous array initially filled with -1
+We need a seen array that is initially filled with falses
+Then we need a way to calculate the shortest distance... this will be done with a distance array that is filled with infinities except for our source node
+The distance of our source node is 0
+
+We want to get the lowest/nearest unseen node
+while we have unvisted, we get the lowest unseen... then we mark it as seen
+Dijkstras works by working one at a time updating the distances for who has the shortest distance to where
+
+For edge in lo, If edge is in the seen array, then continue. Edge weight is added to distance of lo. If that distance is lower than the last known best distance, we updated the lo.
+
+### Implement Dijkstra's Shortest Path
+```js
+function hasUnvisited(seen: boolean[], dists: number[]): boolean {
+    return seen.some((s, i) => !s && dists[i] < Infinity);
+}
+
+function getLowestUnvisited(seen: boolean[], dists: number[]): number {
+    let idx = -1;
+    let lowestDistance = Infinity;
+
+    for (let i = 0; i < seen.length; ++i) {
+        if (seen[i]) {
+            continue;
+        }
+
+        if (lowestDistance > dists[i]) {
+            lowestDistance = dists[i];
+            idx = i;
+        }
+    }
+
+    return idx;
+}
+
+export default function dijkstra_list(
+    source: number,
+    sink: number,
+    arr: WeightedAdjacencyList,
+): number[] {
+    const seen = new Array(arr.length).fill(false);
+    const prev = new Array(arr.length).fill(-1);
+    const dists = new Array(arr.length).fill(Infinity);
+    dists[source] = 0;
+
+    while (hasUnvisited(seen, dists)) {
+        const curr = getLowestUnvisited(seen, dists);
+        seen[curr] = true;
+
+        const adjs = arr[curr];
+        for (let i = 0; i < adjs.length; ++i) {
+            const edge = adjs[i];
+            if (seen[edge.to]) {
+                continue;
+            }
+
+            const dist = dists[curr] + edge.weight;
+            if (dist < dists[edge.to]) {
+                dists[edge.to] = dist;
+                prev[edge.to] = curr;
+            }
+        }
+    }
+
+    const out: number[] = [];
+    let curr = sink;
+
+    while (prev[curr] !== -1) {
+        out.push(curr);
+        curr = prev[curr];
+    }
+
+    out.push(source);
+    return out.reverse();
+}
+```
+
+### Dijkstra's Shortest Path Runtime
+We create arrays that are V long
+While loop checking is O(V<sup>2</sup>)
+Get low check is also O(V<sup>2</sup>)
+This is a situation where just counting loops doesn't give an accurate runtime
+The forloop is not exhaustive, it doesn't go over every edge in the graph
+So the total run time is O(V<sup>2</sup> + E)
+I don't completely follow the logic, but some of the search is actually log V
+So the actual run time is O(logV(VxE)) (better than V<sup>2</sup>)
+
