@@ -82,6 +82,12 @@
 	5. [Dijkstra's Shortest Path](#dijkstras-shortest-path)
 	6. [Implement Dijkstra's Shortest Path](#implement-dijkstras-shortest-path)
 	7. [Dijkstra's Shortest Path Runtime](#dijkstras-shortest-path-runtime)
+13. [Maps and LRU](#maps-and-lru)
+	1. [Maps](#maps)
+		- [Terms](#terms)
+	2. [LRU Cache](#lru-cache)
+	3. [LRU Cache Setup](#lru-cache-setup)
+	4. [Implementing an LRU Cache](#implementing-an-lru-cache)
 ---
 
 ## Introduction
@@ -1976,3 +1982,168 @@ So the total run time is O(V<sup>2</sup> + E)
 I don't completely follow the logic, but some of the search is actually log V
 So the actual run time is O(logV(VxE)) (better than V<sup>2</sup>)
 
+
+## Maps and LRU
+### Maps
+**What are maps?**
+It is too easy to think of ``{}`` or ``new Map()`` and just assume we know them. The reality is we know how to use them, most of the time we don't actually know how they work
+A map is different from ``{}``
+#### Terms
+load factor: The amount of data points vs the amount of storage (data.len / storage.capacity)
+key: a value that is hashable and used to look up data. The hash has to be consistent
+value: a value that is associated with a key
+collision: when 2 keys map to the same cell
+
+How a map works is that we have a key and it needs to map to a value
+They keys mapping to a hash has to be a consistent hash
+A hashing function takes in a key and produces a unique number
+
+Under the hood, we're using an ArrayList or a LinkedList
+
+### LRU Cache
+**What is a LRU**
+Least Recently Used: a caching mechanism that says, we will evict the least recently used item
+A doubly linked list is a data structure to use when working with LRUs
+We also have the potential to use a hash map
+So the hard question is how do we use both at the same time.
+So we have a hash map associated with two generics: ``Hashmap<k,v>``
+Our value would be a node within the linked list
+A hash map lookup is O(1)
+So basically, we're combining two data structures to get benefits from both
+
+### LRU Cache Setup
+```js
+export default class LRU<K, V> {
+    private length: number;
+
+    constructor() {}
+
+    update(key: K, value: V): void {
+        // does it exist
+
+        // if it doesn't we need to insert
+        //  - check capacity and evict if over
+
+        // if it does, we need to update to the front of the list and update value
+    }
+
+
+
+    get(key: K): V | undefined {
+        // check the cache for existance
+
+        // update the value we found and move it to the front
+
+        // return out the value found or undefined if value doesn't exist
+    }
+}
+```
+
+### Implementing an LRU Cache
+We're creating a combination of a linked list and a map to cache data
+```js
+type Node<T> = {
+    value: T;
+    next?: Node<T>;
+    prev?: Node<T>;
+};
+
+function createNode<V>(value: V): Node<V> {
+    return { value };
+}
+
+export default class LRU<K, V> {
+    private length: number;
+    private head?: Node<V>;
+    private tail?: Node<V>;
+
+    private lookup: Map<K, Node<V>>;
+    private reverseLookup: Map<Node<V>, K>;
+
+    constructor(private capacity: number = 10) {
+        this.length = 0;
+        this.head = this.tail = undefined;
+        this.lookup = new Map<K, Node<V>>();
+        this.reverseLookup = new Map<Node<V>, K>();
+    }
+
+    update(key: K, value: V): void {
+        let node = this.lookup.get(key);
+        if (!node) {
+            node = createNode(value);
+            this.length++;
+            this.prepend(node);
+            this.trimCache();
+
+            this.lookup.set(key, node);
+            this.reverseLookup.set(node, key);
+        } else {
+            this.detach(node);
+            this.prepend(node);
+            node.value = value;
+        }
+    }
+
+    get(key: K): V | undefined {
+        // check the cache for existance
+        const node = this.lookup.get(key);
+        if (!node) {
+            return undefined;
+        }
+
+        // update the value we found and move it to the front
+        this.detach(node);
+        this.prepend(node);
+
+        // return out the value found or undefined if value doesn't exist
+        return node.value;
+    }
+
+    private detach(node: Node<V>): void {
+        if (node.prev) {
+            node.prev.next = node.next;
+        }
+
+        if (node.next) {
+            node.next.prev = node.prev;
+        }
+
+        if (this.head === node) {
+            this.head = this.head.next;
+        }
+
+        if (this.tail === node) {
+            this.tail = this.tail.prev;
+        }
+
+        node.next = undefined;
+        node.prev = undefined;
+    }
+
+    private prepend(node: Node<V>) {
+        if (!this.head) {
+            this.head = this.tail = node;
+            return;
+        }
+
+        node.next = this.head;
+        this.head.prev = node;
+
+        this.head = node;
+    }
+
+    private trimCache(): void {
+        if (this.length <= this.capacity) {
+            return;
+        }
+
+        const tail = this.tail as Node<V>;
+        this.detach(this.tail as Node<V>);
+
+        const key = this.reverseLookup.get(tail) as K;
+        this.lookup.delete(key);
+        this.reverseLookup.delete(tail);
+        this.length--;
+    }
+}
+```
